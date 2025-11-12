@@ -11,6 +11,14 @@ async function gateway_main() {
 
   app.setGlobalPrefix('wise');
 
+  // Habilitar CORS para el frontend
+  app.enableCors({
+    origin: 'http://localhost:5173', // URL del frontend
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   app.useGlobalFilters(new AllExceptionsFilter());
 
   app.useGlobalPipes(
