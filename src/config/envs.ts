@@ -6,8 +6,6 @@ interface EnvVars {
   DATABASE_URL: string;
   AUTH_HOST: string;
   AUTH_PORT: number;
-  EVENT_GRID_TOPIC_URL: string;
-  EVENT_GRID_KEY: string;
 }
 const envsSchema = joi
   .object({
@@ -15,9 +13,6 @@ const envsSchema = joi
     DATABASE_URL: joi.string().required(),
     AUTH_HOST: joi.string().required(),
     AUTH_PORT: joi.string().required(),
-    EVENT_GRID_TOPIC_URL: joi.string().required(),
-    EVENT_GRID_KEY: joi.string().required(),
-
   })
   .unknown(true);
 const result = envsSchema.validate(process.env);
@@ -31,6 +26,4 @@ export const envs = {
   databaseurl: envVars.DATABASE_URL,
   authhost: envVars.AUTH_HOST,
   authport: envVars.AUTH_PORT,
-  eventgridkey: envVars.EVENT_GRID_KEY,
-  eventgridtopic: envVars.EVENT_GRID_TOPIC_URL,
 };

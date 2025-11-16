@@ -1,44 +1,25 @@
-import { Controller, Post, Body, UseInterceptors, Headers } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { registroUsuario } from './dto/register.user';
-import { loginUsuario } from './dto/login.user';
-import { envs } from '../config/envs';
-import { ProxyResponseInterceptor } from '../common/interceptors/proxy-response.interceptor';
-import { HttpProxyHelper } from '../common/helpers/http-proxy.helper';
+import { Controller, Get, Res, HttpStatus, Logger } from '@nestjs/common';
+import type { Response } from 'express';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
-@UseInterceptors(ProxyResponseInterceptor)
 export class AuthController {
-  constructor(private readonly httpService: HttpService) {}
+  private readonly logger = new Logger(AuthController.name);
 
-  @Post('/registro')
-  async create(@Body() registroUsuario: registroUsuario) {
-    return HttpProxyHelper.proxyRequest(
-      this.httpService,
-      `http://${envs.authhost}:${envs.authport}/auth/registro`,
-      'POST',
-      registroUsuario,
-    );
-  }
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('/login')
-  async findAll(@Body() loginUsuario: loginUsuario) {
-    return HttpProxyHelper.proxyRequest(
-      this.httpService,
-      `http://${envs.authhost}:${envs.authport}/auth/login`,
-      'POST',
-      loginUsuario,
-    );
-  }
-
-  @Post('/prueba')
-  async prueba (@Body() body:any, @Headers('authorization') authHeader?: string){
-    return HttpProxyHelper.proxyRequest(
-      this.httpService,
-      `http://${envs.authhost}:${envs.authport}/auth/prueba`,
-      'POST',
-      body,
-      authHeader,
-    );
+  @Get('google')
+  async googleAuth(@Res() res: Response): Promise<void> {
+    try {
+      const authUrl = this.authService.getGoogleAuthUrl();
+      this.logger.log(`Redirecting to Google OAuth: ${authUrl}`);
+      res.redirect(authUrl);
+    } catch (error) {
+      this.logger.error('Error redirecting to Google OAuth', error);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error al iniciar el proceso de autenticación',
+      });
+    }
   }
 }
