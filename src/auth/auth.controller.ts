@@ -6,16 +6,16 @@ import { AuthService } from './auth.service';
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Get('google')
   async googleAuth(@Res() res: Response): Promise<void> {
     try {
-      const authUrl = this.authService.getGoogleAuthUrl();
-      this.logger.log(`Redirecting to Google OAuth: ${authUrl}`);
-      res.redirect(authUrl);
+      const authServiceUrl = this.authService.getGoogleAuthUrl();
+      this.logger.log(`Proxying to auth service: ${authServiceUrl}`);
+      res.redirect(HttpStatus.TEMPORARY_REDIRECT, authServiceUrl);
     } catch (error) {
-      this.logger.error('Error redirecting to Google OAuth', error);
+      this.logger.error('Error proxying to auth service', error);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error al iniciar el proceso de autenticación',

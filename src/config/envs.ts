@@ -3,7 +3,7 @@ import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
-  DATABASE_URL: string;
+  DATABASE_URL?: string;
   AUTH_HOST: string;
   AUTH_PORT: number;
   FRONTEND_URL?: string;
@@ -11,7 +11,7 @@ interface EnvVars {
 const envsSchema = joi
   .object({
     PORT: joi.number().required(),
-    DATABASE_URL: joi.string().required(),
+    DATABASE_URL: joi.string().optional(),
     AUTH_HOST: joi.string().required(),
     AUTH_PORT: joi.string().required(),
     FRONTEND_URL: joi.string().optional(),
