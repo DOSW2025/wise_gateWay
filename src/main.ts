@@ -11,6 +11,13 @@ async function gateway_main() {
 
   app.setGlobalPrefix('wise');
 
+  app.enableCors({
+    origin: envs.frontendurl, 
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   app.useGlobalFilters(new AllExceptionsFilter());
 
   app.useGlobalPipes(

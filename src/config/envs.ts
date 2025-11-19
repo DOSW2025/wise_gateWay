@@ -6,6 +6,7 @@ interface EnvVars {
   DATABASE_URL: string;
   AUTH_HOST: string;
   AUTH_PORT: number;
+  FRONTEND_URL?: string;
 }
 const envsSchema = joi
   .object({
@@ -13,6 +14,8 @@ const envsSchema = joi
     DATABASE_URL: joi.string().required(),
     AUTH_HOST: joi.string().required(),
     AUTH_PORT: joi.string().required(),
+    FRONTEND_URL: joi.string().optional(),
+
   })
   .unknown(true);
 const result = envsSchema.validate(process.env);
@@ -26,4 +29,6 @@ export const envs = {
   databaseurl: envVars.DATABASE_URL,
   authhost: envVars.AUTH_HOST,
   authport: envVars.AUTH_PORT,
+  frontendurl: envVars.FRONTEND_URL,
+
 };
