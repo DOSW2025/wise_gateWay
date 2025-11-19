@@ -11,9 +11,8 @@ async function gateway_main() {
 
   app.setGlobalPrefix('wise');
 
-  // Habilitar CORS para el frontend
   app.enableCors({
-    origin: ['http://localhost:5173', 'https://wise-front.vercel.app/'], // URL del frontend
+    origin: envs.frontendurl, 
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
