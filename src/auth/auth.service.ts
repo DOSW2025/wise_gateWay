@@ -6,7 +6,8 @@ export class AuthService {
   private readonly authServiceUrl: string;
 
   constructor() {
-    this.authServiceUrl = `http://${envs.authhost}:${envs.authport}`;
+    //this.authServiceUrl = `http://${envs.authhost}:${envs.authport}`;
+    this.authServiceUrl = `https://${envs.authazure}`;
   }
 
   getGoogleAuthUrl(): string {

@@ -3,18 +3,18 @@ import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
-  DATABASE_URL?: string;
   AUTH_HOST: string;
   AUTH_PORT: number;
   FRONTEND_URL?: string;
+  AUTH_AZURE?: string;
 }
 const envsSchema = joi
   .object({
     PORT: joi.number().required(),
-    DATABASE_URL: joi.string().optional(),
     AUTH_HOST: joi.string().required(),
     AUTH_PORT: joi.string().required(),
     FRONTEND_URL: joi.string().optional(),
+    AUTH_AZURE: joi.string().optional(),
 
   })
   .unknown(true);
@@ -26,9 +26,9 @@ const envVars = result.value as EnvVars;
 
 export const envs = {
   port: envVars.PORT,
-  databaseurl: envVars.DATABASE_URL,
   authhost: envVars.AUTH_HOST,
   authport: envVars.AUTH_PORT,
   frontendurl: envVars.FRONTEND_URL,
+  authazure: envVars.AUTH_AZURE,
 
 };
