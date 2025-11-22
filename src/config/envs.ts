@@ -11,7 +11,7 @@ interface EnvVars {
   FRONTEND_URL?: string;
   AUTH_AZURE?: string;
   USER_MANAGEMENT_AZURE?: string;
-  PROTOCOL?: string;
+  AUTH_PROTOCOL?: string;
 }
 
 const envsSchema = joi
@@ -25,7 +25,7 @@ const envsSchema = joi
     FRONTEND_URL: joi.string().optional(),
     AUTH_AZURE: joi.string().optional(),
     USER_MANAGEMENT_AZURE: joi.string().optional(),
-    PROTOCOL: joi.string().valid('http', 'https').default('http'),
+    AUTH_PROTOCOL: joi.string().valid('http', 'https').default('http'),
   })
   .unknown(true);
 
@@ -47,5 +47,10 @@ export const envs = {
   frontendUrl: envVars.FRONTEND_URL,
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
-  protocol: envVars.PROTOCOL,
+  protocol: envVars.AUTH_PROTOCOL,
+  // Aliases for compatibility
+  authhost: envVars.AUTH_HOST,
+  authport: envVars.AUTH_PORT,
+  authazure: envVars.AUTH_AZURE,
+  authprotocol: envVars.AUTH_PROTOCOL,
 };
