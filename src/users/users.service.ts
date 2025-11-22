@@ -10,7 +10,7 @@ export class UsersService {
     private readonly authServiceUrl: string;
 
     constructor(private readonly httpService: HttpService) {
-        this.authServiceUrl = envs.authazure || `${envs.authprotocol}://${envs.authhost}:${envs.authport}`;
+        this.authServiceUrl = envs.authAzure || `${envs.protocol}://${envs.authHost}:${envs.authPort}`;
     }
 
     async findAll(params: any, token: string) {

@@ -1,6 +1,7 @@
-import { Controller, Get, Res, HttpStatus, Logger } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, Logger, Query } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
+import { envs } from '../config/envs';
 
 @Controller('auth')
 export class AuthController {
@@ -21,5 +22,23 @@ export class AuthController {
         message: 'Error al iniciar el proceso de autenticación',
       });
     }
+  }
+
+  @Get('callback')
+  async googleAuthCallback(
+    @Query('token') token: string,
+    @Query('user') user: string,
+    @Query('error') error: string,
+    @Res() res: Response
+  ): Promise<void> {
+    if (error) {
+      const errorUrl = `${envs.frontendUrl}/login?error=${encodeURIComponent(error)}`;
+      res.redirect(HttpStatus.TEMPORARY_REDIRECT, errorUrl);
+      return;
+    }
+
+    const redirectUrl = `${envs.frontendUrl}/auth/callback?token=${token}&user=${user}`;
+    this.logger.log(`Redirecting to frontend: ${redirectUrl}`);
+    res.redirect(HttpStatus.TEMPORARY_REDIRECT, redirectUrl);
   }
 }
