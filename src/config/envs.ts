@@ -5,6 +5,7 @@ interface EnvVars {
   PORT: number;
   AUTH_HOST: string;
   AUTH_PORT: number;
+  AUTH_PROTOCOL: string;
   FRONTEND_URL?: string;
   AUTH_AZURE?: string;
 }
@@ -13,6 +14,7 @@ const envsSchema = joi
     PORT: joi.number().required(),
     AUTH_HOST: joi.string().required(),
     AUTH_PORT: joi.string().required(),
+    AUTH_PROTOCOL: joi.string().default('http'),
     FRONTEND_URL: joi.string().optional(),
     AUTH_AZURE: joi.string().optional(),
 
@@ -28,6 +30,7 @@ export const envs = {
   port: envVars.PORT,
   authhost: envVars.AUTH_HOST,
   authport: envVars.AUTH_PORT,
+  authprotocol: envVars.AUTH_PROTOCOL,
   frontendurl: envVars.FRONTEND_URL,
   authazure: envVars.AUTH_AZURE,
 
