@@ -7,7 +7,7 @@ export class AuthService {
 
   constructor() {
     this.authServiceUrl = envs.authAzure
-      ? `${envs.protocol}://${envs.authAzure}`
+      ? envs.authAzure
       : `${envs.protocol}://${envs.authHost}:${envs.authPort}`;
   }
 

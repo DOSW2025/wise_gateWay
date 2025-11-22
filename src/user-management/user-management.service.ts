@@ -13,7 +13,7 @@ export class UserManagementService {
 
   constructor(private readonly httpService: HttpService) {
     this.userManagementServiceUrl = envs.userManagementAzure
-      ? `${envs.protocol}://${envs.userManagementAzure}`
+      ? envs.userManagementAzure
       : `${envs.protocol}://${envs.userManagementHost}:${envs.userManagementPort}`;
   }
 
