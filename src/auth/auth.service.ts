@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { envs } from '../config/envs';
+import { envs } from '../config';
 
 @Injectable()
 export class AuthService {
   private readonly authServiceUrl: string;
 
   constructor() {
-    //this.authServiceUrl = `http://${envs.authhost}:${envs.authport}`;
-    this.authServiceUrl = `https://${envs.authazure}`;
+    this.authServiceUrl = envs.authAzure
+      ? `${envs.protocol}://${envs.authAzure}`
+      : `${envs.protocol}://${envs.authHost}:${envs.authPort}`;
   }
 
   getGoogleAuthUrl(): string {

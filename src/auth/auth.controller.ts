@@ -1,14 +1,16 @@
 import { Controller, Get, Res, HttpStatus, Logger } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
+import { Public } from './decorators';
 
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Get('google')
+  @Public()
   async googleAuth(@Res() res: Response): Promise<void> {
     try {
       const authServiceUrl = this.authService.getGoogleAuthUrl();
@@ -23,3 +25,4 @@ export class AuthController {
     }
   }
 }
+
