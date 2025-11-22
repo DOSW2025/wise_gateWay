@@ -12,7 +12,7 @@ async function gateway_main() {
   app.setGlobalPrefix('wise');
 
   app.enableCors({
-    origin: envs.frontendurl, 
+    origin: envs.frontendUrl,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
