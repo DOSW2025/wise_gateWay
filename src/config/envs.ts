@@ -8,7 +8,7 @@ interface EnvVars {
   USER_MANAGEMENT_HOST: string;
   USER_MANAGEMENT_PORT: number;
   JWT_SECRET: string;
-  FRONTEND_URL?: string;
+  FRONTEND_URL: string;
   AUTH_AZURE?: string;
   USER_MANAGEMENT_AZURE?: string;
   AUTH_PROTOCOL?: string;
@@ -22,7 +22,7 @@ const envsSchema = joi
     USER_MANAGEMENT_HOST: joi.string().required(),
     USER_MANAGEMENT_PORT: joi.number().required(),
     JWT_SECRET: joi.string().required(),
-    FRONTEND_URL: joi.string().optional(),
+    FRONTEND_URL: joi.string().required(),
     AUTH_AZURE: joi.string().optional(),
     USER_MANAGEMENT_AZURE: joi.string().optional(),
     AUTH_PROTOCOL: joi.string().valid('http', 'https').default('http'),
@@ -48,9 +48,4 @@ export const envs = {
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
-  // Aliases for compatibility
-  authhost: envVars.AUTH_HOST,
-  authport: envVars.AUTH_PORT,
-  authazure: envVars.AUTH_AZURE,
-  authprotocol: envVars.AUTH_PROTOCOL,
 };
