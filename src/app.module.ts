@@ -7,4 +7,4 @@ import { UserManagementModule } from './user-management/user-management.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
