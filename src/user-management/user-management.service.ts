@@ -12,9 +12,15 @@ export class UserManagementService {
   private readonly userManagementServiceUrl: string;
 
   constructor(private readonly httpService: HttpService) {
-    this.userManagementServiceUrl = envs.userManagementAzure
+    let url = envs.userManagementAzure
       ? envs.userManagementAzure
       : `${envs.protocol}://${envs.userManagementHost}:${envs.userManagementPort}`;
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = `https://${url}`;
+    }
+
+    this.userManagementServiceUrl = url;
   }
 
   async findAllPaginated(paginationDto: PaginationDto, request: Request) {
