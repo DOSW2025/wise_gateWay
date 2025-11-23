@@ -6,9 +6,15 @@ export class AuthService {
   private readonly authServiceUrl: string;
 
   constructor() {
-    this.authServiceUrl = envs.authAzure
+    let url = envs.authAzure
       ? envs.authAzure
       : `${envs.protocol}://${envs.authHost}:${envs.authPort}`;
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = `https://${url}`;
+    }
+
+    this.authServiceUrl = url;
   }
 
   getGoogleAuthUrl(): string {
