@@ -37,7 +37,7 @@ export class AuthController {
       return;
     }
 
-    const redirectUrl = `${envs.frontendUrl}/auth/callback?token=${token}&user=${user}`;
+    const redirectUrl = `${envs.frontendUrl}/auth/callback?token=${encodeURIComponent(token)}&user=${encodeURIComponent(user)}`;
     this.logger.log(`Redirecting to frontend: ${redirectUrl}`);
     res.redirect(HttpStatus.TEMPORARY_REDIRECT, redirectUrl);
   }
