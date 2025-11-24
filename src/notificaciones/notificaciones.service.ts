@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Request } from 'express';
-import { CreateNotificacioneDto } from './dto/create-notificacione.dto';
 import { HttpService } from '@nestjs/axios';
 import { envs } from 'src/config';
 import { JwtForwardingHelper } from 'src/common/helpers';
@@ -13,9 +12,11 @@ export class NotificacionesService {
 
 
   constructor(private readonly httpService: HttpService) {
-    let url = envs.userManagementAzure
-      ? envs.userManagementAzure
-      : `${envs.protocol}://${envs.userNotify}:${envs.userNotifyPort}`;
+    let url = envs.notificacionesAzure;
+
+    if (!url) {
+      throw new Error('NOTIFICACIONES_AZURE environment variable is required');
+    }
 
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       url = `https://${url}`;
@@ -25,13 +26,13 @@ export class NotificacionesService {
   }
 
 
-  async usernotify(userid: string, createNotificacioneDto: CreateNotificacioneDto, request: Request) {
+  async usernotify(userid: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userNotifyService}/notificacion/${userid}`;
+    const url = `${this.userNotifyService}/${userid}`;
     try {
-      this.logger.log(`Forwarding PATCH request to: ${url}`);
+      this.logger.log(`Forwarding GET request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.patch(url, createNotificacioneDto, config),
+        this.httpService.get(url, config),
       );
       return response.data;
     } catch (error) {
@@ -40,13 +41,13 @@ export class NotificacionesService {
     }
   }
 
-  async notifyUnread(userid: string, createNotificacioneDto: CreateNotificacioneDto, request: Request) {
+  async notifyUnread(userid: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userNotifyService}/notificacion/unread-count/${userid}`;
+    const url = `${this.userNotifyService}/unread-count/${userid}`;
     try {
-      this.logger.log(`Forwarding PATCH request to: ${url}`);
+      this.logger.log(`Forwarding GET request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.patch(url, createNotificacioneDto, config),
+        this.httpService.get(url, config),
       );
       return response.data;
     } catch (error) {
@@ -55,13 +56,13 @@ export class NotificacionesService {
     }
   }
 
-  async notifyDelete(id: string, createNotificacioneDto: CreateNotificacioneDto, request: Request) {
+  async notifyDelete(id: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userNotifyService}/notificacion/${id}`;
+    const url = `${this.userNotifyService}/${id}`;
     try {
-      this.logger.log(`Forwarding PATCH request to: ${url}`);
+      this.logger.log(`Forwarding DELETE request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.patch(url, createNotificacioneDto, config),
+        this.httpService.delete(url, config),
       );
       return response.data;
     } catch (error) {
@@ -70,13 +71,13 @@ export class NotificacionesService {
     }
   }
 
-  async allnotifyRead(userid: string, createNotificacioneDto: CreateNotificacioneDto, request: Request) {
+  async allnotifyRead(userid: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userNotifyService}/notificacion/read-all/${userid}`;
+    const url = `${this.userNotifyService}/read-all/${userid}`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.patch(url, createNotificacioneDto, config),
+        this.httpService.patch(url, {}, config),
       );
       return response.data;
     } catch (error) {
@@ -85,13 +86,13 @@ export class NotificacionesService {
     }
   }
 
-  async notifyRead(id: string, createNotificacioneDto: CreateNotificacioneDto, request: Request) {
+  async notifyRead(id: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userNotifyService}/notificacion/read/${id}`;
+    const url = `${this.userNotifyService}/read/${id}`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.patch(url, createNotificacioneDto, config),
+        this.httpService.patch(url, {}, config),
       );
       return response.data;
     } catch (error) {

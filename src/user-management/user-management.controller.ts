@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { UserManagementService } from './user-management.service';
-import { PaginationDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto } from './dto';
+import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto } from './dto';
 import { JwtAuthGuard, RolesGuard, Roles } from '../auth';
 import { Role } from '../common/dto';
 
@@ -22,8 +22,8 @@ export class UserManagementController {
 
   @Get()
   @Roles(Role.ADMIN)
-  findAll(@Query() paginationDto: PaginationDto, @Req() request: Request) {
-    return this.userManagementService.findAllPaginated(paginationDto, request);
+  findAll(@Query() filterUsersDto: FilterUsersDto, @Req() request: Request) {
+    return this.userManagementService.findAllWithFilters(filterUsersDto, request);
   }
 
   @Patch(':id/rol')
