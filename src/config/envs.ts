@@ -12,6 +12,8 @@ interface EnvVars {
   AUTH_AZURE?: string;
   USER_MANAGEMENT_AZURE?: string;
   AUTH_PROTOCOL?: string;
+  NOTIFICACIONES_AZURE?: string;
+  NOTIFICACIONES_PORT?: number;
 }
 
 const envsSchema = joi
@@ -26,6 +28,8 @@ const envsSchema = joi
     AUTH_AZURE: joi.string().optional(),
     USER_MANAGEMENT_AZURE: joi.string().optional(),
     AUTH_PROTOCOL: joi.string().valid('http', 'https').default('http'),
+    NOTIFICACIONES_AZURE: joi.string().optional(),
+    NOTIFICACIONES_PORT: joi.number().optional(),
   })
   .unknown(true);
 
@@ -48,4 +52,6 @@ export const envs = {
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
+  notificacionesAzure: envVars.NOTIFICACIONES_AZURE,
+  notificacionesPort: envVars.NOTIFICACIONES_PORT,
 };
