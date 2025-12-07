@@ -140,4 +140,33 @@ export class UserManagementService {
       throw error;
     }
   }
+  async getUserStatistics(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/usuarios`;
+    try {
+      this.logger.log(`Forwarding DELETE request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error calculating stats`, error);
+      throw error;
+    }
+  }
+
+  async getRoleStatistics(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/roles`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error calculating role statistics`, error);
+      throw error;
+    }
+  }
 }

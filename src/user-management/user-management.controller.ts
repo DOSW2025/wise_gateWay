@@ -64,4 +64,15 @@ export class UserManagementController {
   deleteMyAccount(@Req() request: Request) {
     return this.userManagementService.deleteMyAccount(request);
   }
+  @Get('estadisticas/usuarios')
+  @Roles(Role.ADMIN)
+  getUserStatistics(@Req() request: Request) {
+    return this.userManagementService.getUserStatistics(request);
+  }
+
+  @Get('estadisticas/roles')
+  @Roles(Role.ADMIN)
+  getRoleStatistics(@Req() request: Request) {
+    return this.userManagementService.getRoleStatistics(request);
+  }
 }
