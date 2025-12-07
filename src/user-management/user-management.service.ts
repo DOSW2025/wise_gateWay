@@ -20,7 +20,7 @@ export class UserManagementService {
       url = `https://${url}`;
     }
 
-    this.userManagementServiceUrl = url;
+    this.userManagementServiceUrl = url.replace(/\/$/, '');
   }
 
   async findAllPaginated(paginationDto: PaginationDto, request: Request) {

@@ -32,12 +32,22 @@ export class AuthController {
     @Res() res: Response
   ): Promise<void> {
     if (error) {
-      const errorUrl = `${envs.frontendUrl}/login?error=${encodeURIComponent(error)}`;
-      res.redirect(HttpStatus.TEMPORARY_REDIRECT, errorUrl);
+      const url = new URL(envs.frontendUrl);
+      const basePath = url.pathname.replace(/\/$/, '');
+      url.pathname = `${basePath}/login`;
+      url.searchParams.append('error', error);
+
+      res.redirect(HttpStatus.TEMPORARY_REDIRECT, url.toString());
       return;
     }
 
-    const redirectUrl = `${envs.frontendUrl}/auth/callback?token=${encodeURIComponent(token)}&user=${encodeURIComponent(user)}`;
+    const url = new URL(envs.frontendUrl);
+    const basePath = url.pathname.replace(/\/$/, '');
+    url.pathname = `${basePath}/auth/callback`;
+    url.searchParams.append('token', token);
+    url.searchParams.append('user', user);
+
+    const redirectUrl = url.toString();
     this.logger.log(`Redirecting to frontend: ${redirectUrl}`);
     res.redirect(HttpStatus.TEMPORARY_REDIRECT, redirectUrl);
   }

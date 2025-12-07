@@ -48,7 +48,7 @@ export const envs = {
   userManagementHost: envVars.USER_MANAGEMENT_HOST,
   userManagementPort: envVars.USER_MANAGEMENT_PORT,
   jwtSecret: envVars.JWT_SECRET,
-  frontendUrl: envVars.FRONTEND_URL.startsWith('http') ? envVars.FRONTEND_URL : `https://${envVars.FRONTEND_URL}`,
+  frontendUrl: (envVars.FRONTEND_URL.startsWith('http') ? envVars.FRONTEND_URL : `https://${envVars.FRONTEND_URL}`).replace(/\/$/, ''),
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
