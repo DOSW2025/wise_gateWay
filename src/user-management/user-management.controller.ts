@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { UserManagementService } from './user-management.service';
-import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto } from './dto';
+import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
 import { JwtAuthGuard, RolesGuard, Roles } from '../auth';
 import { Role } from '../common/dto';
 
@@ -74,5 +74,11 @@ export class UserManagementController {
   @Roles(Role.ADMIN)
   getRoleStatistics(@Req() request: Request) {
     return this.userManagementService.getRoleStatistics(request);
+  }
+
+  @Get('estadisticas/crecimiento')
+  @Roles(Role.ADMIN)
+  getUserGrowth(@Query() userGrowthDto: UserGrowthDto, @Req() request: Request) {
+    return this.userManagementService.getUserGrowth(userGrowthDto, request);
   }
 }
