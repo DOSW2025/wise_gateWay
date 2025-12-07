@@ -1,9 +1,14 @@
 import { Controller, Get, Post, Body, HttpStatus } from '@nestjs/common';
 import { IaService } from './ia.service';
+import { Logger } from '@nestjs/common';
 
 @Controller('ia')
 export class IaController {
-  constructor(private readonly iaService: IaService) {}
+  private readonly logger = new Logger(IaController.name);
+
+  constructor(private readonly iaService: IaService) {
+     this.logger.log('IaController initialized');
+  }
 
   @Get('swagger.json')
   async getSwaggerJson() {

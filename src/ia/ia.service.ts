@@ -1,16 +1,25 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+import { envs } from 'src/config';
 
 @Injectable()
 export class IaService {
   private readonly baseUrl: string;
 
   constructor(private readonly httpService: HttpService) {
-    // Use environment variables to configure the base URL
-    const host = process.env.IA_HOST || 'localhost';
-    const port = process.env.IA_PORT || '3004';
-    this.baseUrl = `http://${host}:${port}`;
+   let url = envs.iaAzure;
+   
+       if (!url) {
+         throw new Error('IA_AZURE environment variable is required');
+       }
+   
+       if (!url.startsWith('http://') && !url.startsWith('https://')) {
+         url = `https://${url}`;
+       }
+   
+       this.baseUrl = url;
+
   }
 
   async getSwaggerJson() {
