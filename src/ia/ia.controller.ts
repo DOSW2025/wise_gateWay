@@ -27,6 +27,7 @@ export class IaController {
 
   @Post('chat')
   async chat(@Body() body: any) {
+      console.log('Chat endpoint hit with body:', body); // Agrega este log
     return this.iaService.chat(body);
   }
 
