@@ -14,6 +14,8 @@ interface EnvVars {
   AUTH_PROTOCOL?: string;
   NOTIFICACIONES_AZURE?: string;
   NOTIFICACIONES_PORT?: number;
+  MATERIALES_AZURE?: string;
+  MATERIALES_PORT?: number;
 }
 
 const envsSchema = joi
@@ -30,6 +32,8 @@ const envsSchema = joi
     AUTH_PROTOCOL: joi.string().valid('http', 'https').default('http'),
     NOTIFICACIONES_AZURE: joi.string().optional(),
     NOTIFICACIONES_PORT: joi.number().optional(),
+    MATERIALES_AZURE: joi.string().optional(),
+    MATERIALES_PORT: joi.number().optional(),
   })
   .unknown(true);
 
@@ -54,4 +58,6 @@ export const envs = {
   protocol: envVars.AUTH_PROTOCOL,
   notificacionesAzure: envVars.NOTIFICACIONES_AZURE,
   notificacionesPort: envVars.NOTIFICACIONES_PORT,
+  materialesAzure: envVars.MATERIALES_AZURE,
+  materialesPort: envVars.MATERIALES_PORT,
 };
