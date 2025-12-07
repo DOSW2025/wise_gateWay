@@ -1,65 +1,57 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class IaService {
+  private readonly baseUrl: string;
+
+  constructor(private readonly httpService: HttpService) {
+    // Use environment variables to configure the base URL
+    const host = process.env.IA_HOST || 'localhost';
+    const port = process.env.IA_PORT || '3004';
+    this.baseUrl = `http://${host}:${port}`;
+  }
+
   async getSwaggerJson() {
-    const swaggerPath = path.resolve(__dirname, '../config/swagger.json');
-    if (fs.existsSync(swaggerPath)) {
-      const swaggerData = fs.readFileSync(swaggerPath, 'utf-8');
-      return JSON.parse(swaggerData);
-    }
-    throw new Error('Swagger JSON not found');
+    const response = await firstValueFrom(
+      this.httpService.get(`${this.baseUrl}/swagger.json`),
+    );
+    return response.data;
   }
 
   async getHealthStatus() {
-    try {
-      // Verificar conexión a la base de datos
-      await PrismaService.$connect();
-      return { status: 'ok', timestamp: new Date().toISOString() };
-    } catch (error) {
-      throw new Error('Health check failed: ' + error.message);
-    }
-  }
-
-  async getVersion() {
-    const packageJsonPath = path.resolve(__dirname, '../../package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-    return { version: packageJson.version };
-  }
-
-  async getRootInfo() {
-    const version = await this.getVersion();
-    return {
-      name: 'ECIWISE+ RAG Service',
-      version: version.version,
-      description: 'API for academic document analysis and RAG-powered recommendations',
-    };
+    const response = await firstValueFrom(
+      this.httpService.get(`${this.baseUrl}/health`),
+    );
+    return response.data;
   }
 
   async simulateAnalysis(body: any) {
-    // Lógica de simulación de análisis
-    return { message: 'Analysis simulated successfully', body };
-  }
-
-  async simulateSave(body: any) {
-    // Lógica de simulación de guardado
-    return { message: 'Save simulated successfully', body };
-  }
-
-  async chat(body: any) {
-    // Lógica para procesar mensajes de chat
-    return { message: 'Chat processed successfully', body };
+    const response = await firstValueFrom(
+      this.httpService.post(`${this.baseUrl}/analyze`, body),
+    );
+    return response.data;
   }
 
   async getRecommendations(body: any) {
-    // Lógica para obtener recomendaciones
-    return { message: 'Recommendations fetched successfully', body };
+    const response = await firstValueFrom(
+      this.httpService.post(`${this.baseUrl}/recommendations`, body),
+    );
+    return response.data;
   }
 
-  async navigateChat(body: any) {
-    // Lógica para manejar la navegación en el chat
-    return { message: 'Navigation processed successfully', body };
+  async simulateSave(body: any) {
+    const response = await firstValueFrom(
+      this.httpService.post(`${this.baseUrl}/save`, body),
+    );
+    return response.data;
+  }
+
+  async chat(body: any) {
+    const response = await firstValueFrom(
+      this.httpService.post(`${this.baseUrl}/chat`, body),
+    );
+    return response.data;
   }
 }
