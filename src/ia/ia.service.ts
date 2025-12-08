@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { envs } from 'src/config';
 
@@ -23,44 +23,86 @@ export class IaService {
   }
 
   async getSwaggerJson() {
-    const response = await firstValueFrom(
-      this.httpService.get(`${this.baseUrl}/swagger.json`),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.baseUrl}/swagger.json`),
+      );
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to fetch Swagger JSON: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 
   async getHealthStatus() {
-    const response = await firstValueFrom(
-      this.httpService.get(`${this.baseUrl}/health`),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.baseUrl}/health`),
+      );
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to fetch health status: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 
   async simulateAnalysis(body: any) {
-    const response = await firstValueFrom(
-      this.httpService.post(`${this.baseUrl}/analyze`, body),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.baseUrl}/analyze`, body),
+      );
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to simulate analysis: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 
   async getRecommendations(body: any) {
-    const response = await firstValueFrom(
-      this.httpService.post(`${this.baseUrl}/recommendations`, body),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.baseUrl}/recommendations`, body),
+      );
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to fetch recommendations: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 
   async simulateSave(body: any) {
-    const response = await firstValueFrom(
-      this.httpService.post(`${this.baseUrl}/save`, body),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.baseUrl}/save`, body),
+      );
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to simulate save: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 
   async chat(body: any) {
-    const response = await firstValueFrom(
-      this.httpService.post(`${this.baseUrl}/chat`, body),
-    );
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.baseUrl}/chat`, body),
+      );
+      return response.data;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to process chat request: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 }
