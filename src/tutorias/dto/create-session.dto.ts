@@ -10,6 +10,10 @@ import {
   Matches,
   IsIn
 } from 'class-validator';
+export enum Modalidad {
+  VIRTUAL = 'VIRTUAL',
+  PRESENCIAL = 'PRESENCIAL',
+}
 
 /**
  * DTO para la creación de una sesión de tutoría
@@ -87,7 +91,17 @@ export class CreateSessionDto {
   @IsNotEmpty({ message: 'La hora de fin es obligatoria' })
   endTime: string;
 
-
+  @ApiProperty({
+    description: 'Modalidad de la sesión',
+    enum: Modalidad,
+    example: Modalidad.VIRTUAL,
+    enumName: 'Modalidad',
+  })
+  @IsEnum(Modalidad, { 
+    message: 'La modalidad debe ser uno de los valores permitidos: VIRTUAL o PRESENCIAL' 
+  })
+  @IsNotEmpty({ message: 'La modalidad es obligatoria' })
+  mode: Modalidad;
 
   @ApiProperty({
     description: 'Comentarios opcionales del estudiante al solicitar la sesión',

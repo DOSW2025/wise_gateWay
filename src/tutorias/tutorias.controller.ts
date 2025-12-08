@@ -211,5 +211,10 @@ export class TutoriasController {
   getFullNameById(@Param() params: FindUserByIdDto, @Request() req: ExpressRequest) {
     return this.tutoriasService.getFullNameById(params.id, req);
   }
+
+  @Get('materia/:codigo')
+  findByCodigo(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.findByCodigo(codigo, req);
+  }
 }
 
