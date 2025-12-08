@@ -166,6 +166,26 @@ export class MaterialesService {
   }
 
   /**
+   * Obtener información detallada de un material
+   */
+  async getMaterialDetail(id: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/${id}`;
+
+  try {
+    this.logger.log(`Forwarding GET request to: ${url}`);
+    const response = await firstValueFrom(
+      this.httpService.get(url, config),
+    );
+    return response.data;
+  } catch (error) {
+    this.logger.error(`Error getting material detail`, error);
+    throw error;
+  }
+}
+
+
+  /**
    * Descargar material
    */
   async downloadMaterial(materialId: string, res: Response, request: Request) {
