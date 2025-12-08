@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { envs } from '../config';
 import type { Request } from 'express';
 import { JwtForwardingHelper } from '../common/helpers';
-import { PaginationDto, FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
+import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
 
 @Injectable()
 export class UserManagementService {
@@ -21,25 +21,6 @@ export class UserManagementService {
     }
 
     this.userManagementServiceUrl = url;
-  }
-
-  async findAllPaginated(paginationDto: PaginationDto, request: Request) {
-    const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userManagementServiceUrl}/gestion-usuarios`;
-
-    try {
-      this.logger.log(`Forwarding request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, {
-          ...config,
-          params: paginationDto,
-        }),
-      );
-      return response.data;
-    } catch (error) {
-      this.logger.error(`Error forwarding request to user management service`, error);
-      throw error;
-    }
   }
 
   async findAllWithFilters(filterUsersDto: FilterUsersDto, request: Request) {

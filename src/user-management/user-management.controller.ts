@@ -63,8 +63,8 @@ export class UserManagementController {
   })
   @ApiResponse({ status: 401, description: 'No autorizado - Token JWT inválido o ausente' })
   @ApiResponse({ status: 403, description: 'Prohibido - No tienes permisos de administrador' })
-  findAll(@Query() paginationDto: PaginationDto, @Req() request: Request) {
-    return this.userManagementService.findAllPaginated(paginationDto, request);
+  findAll(@Query() filter: FilterUsersDto, @Req() request: Request) {
+    return this.userManagementService.findAllWithFilters(filter, request);
   }
 
   @Patch(':id/rol')
