@@ -5,6 +5,7 @@ import { ChatDto } from './dto/chat.dto';
 import { SimulateAnalysisDto } from './dto/simulate-analysis.dto';
 import { SimulateSaveDto } from './dto/simulate-save.dto';
 import { RecommendationsDto } from './dto/recommendations.dto';
+import { ChatNavigationDto } from './dto/chat-navigation.dto';
 
 @Controller('ia')
 export class IaController {
@@ -43,5 +44,15 @@ export class IaController {
   @Post('chat/recommendations')
   async getRecommendations(@Body(new ValidationPipe()) body: RecommendationsDto) {
     return this.iaService.getRecommendations(body);
+  }
+
+  @Post('chat/nav')
+  async chatNavigation(@Body() chatNavigationDto: ChatNavigationDto) {
+    const { message } = chatNavigationDto;
+    const reply = await this.iaService.chatNavigation(message);
+    return {
+      success: true,
+      data: { reply },
+    };
   }
 }

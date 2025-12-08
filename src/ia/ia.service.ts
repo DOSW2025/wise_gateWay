@@ -67,7 +67,7 @@ export class IaService {
   async getRecommendations(body: any) {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(`${this.baseUrl}/recommendations`, body),
+        this.httpService.post(`${this.baseUrl}/api/chat/recommendations`, body),
       );
       return response.data;
     } catch (error) {
@@ -95,12 +95,37 @@ export class IaService {
   async chat(body: any) {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(`${this.baseUrl}/chat`, body),
+        this.httpService.post(`${this.baseUrl}/api/chat`, body),
       );
       return response.data;
     } catch (error) {
       throw new HttpException(
         `Failed to process chat request: ${error.message}`,
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
+  }
+
+  async chatNavigation(message: string) {
+    try {
+      // Log básico para registrar la solicitud
+      console.log(`[ChatNavigation] Request received at ${new Date().toISOString()} with message: "${message}"`);
+
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.baseUrl}/api/chat/nav`, { message }),
+      );
+
+      if (!response.data || typeof response.data !== 'object' || !response.data.data || !('reply' in response.data.data)) {
+        throw new HttpException(
+          'Invalid response from backend: Missing reply field',
+          HttpStatus.BAD_GATEWAY,
+        );
+      }
+
+      return response.data.data.reply;
+    } catch (error) {
+      throw new HttpException(
+        `Failed to process chat navigation request: ${error.message}`,
         HttpStatus.BAD_GATEWAY,
       );
     }
