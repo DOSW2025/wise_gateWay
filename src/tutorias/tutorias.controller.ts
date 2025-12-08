@@ -205,4 +205,11 @@ export class TutoriasController {
   findRatingsBySession(@Param('sessionId') sessionId: string, @Request() req: ExpressRequest) {
     return this.tutoriasService.findRatingsBySession(sessionId, req);
   }
+
+  @Get('nombre/:id')
+  @Public()
+  getFullNameById(@Param() params: FindUserByIdDto, @Request() req: ExpressRequest) {
+    return this.tutoriasService.getFullNameById(params.id, req);
+  }
 }
+
