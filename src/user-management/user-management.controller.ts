@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { UserManagementService } from './user-management.service';
-import { PaginationDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto } from './dto';
+import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
 import { JwtAuthGuard, RolesGuard, Roles } from '../auth';
 import { Role } from '../common/dto';
 
@@ -198,5 +198,22 @@ export class UserManagementController {
   @ApiResponse({ status: 401, description: 'No autorizado - Token JWT inválido o ausente' })
   deleteMyAccount(@Req() request: Request) {
     return this.userManagementService.deleteMyAccount(request);
+  }
+  @Get('estadisticas/usuarios')
+  @Roles(Role.ADMIN)
+  getUserStatistics(@Req() request: Request) {
+    return this.userManagementService.getUserStatistics(request);
+  }
+
+  @Get('estadisticas/roles')
+  @Roles(Role.ADMIN)
+  getRoleStatistics(@Req() request: Request) {
+    return this.userManagementService.getRoleStatistics(request);
+  }
+
+  @Get('estadisticas/crecimiento')
+  @Roles(Role.ADMIN)
+  getUserGrowth(@Query() userGrowthDto: UserGrowthDto, @Req() request: Request) {
+    return this.userManagementService.getUserGrowth(userGrowthDto, request);
   }
 }
