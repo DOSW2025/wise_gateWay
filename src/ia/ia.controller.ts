@@ -2,8 +2,6 @@ import { Controller, Get, Post, Body, HttpStatus, ValidationPipe } from '@nestjs
 import { IaService } from './ia.service';
 import { Logger } from '@nestjs/common';
 import { ChatDto } from './dto/chat.dto';
-import { SimulateAnalysisDto } from './dto/simulate-analysis.dto';
-import { SimulateSaveDto } from './dto/simulate-save.dto';
 import { RecommendationsDto } from './dto/recommendations.dto';
 import { ChatNavigationDto } from './dto/chat-navigation.dto';
 
@@ -27,7 +25,6 @@ export class IaController {
 
   @Post('chat')
   async chat(@Body(new ValidationPipe()) body: ChatDto) {
-    console.log('Chat endpoint hit with body:', body);
     return this.iaService.chat(body);
   }
 
@@ -37,7 +34,7 @@ export class IaController {
   }
 
   @Post('chat/nav')
-  async chatNavigation(@Body() chatNavigationDto: ChatNavigationDto) {
+  async chatNavigation(@Body(new ValidationPipe()) chatNavigationDto: ChatNavigationDto) {
     const { message } = chatNavigationDto;
     const reply = await this.iaService.chatNavigation(message);
     return {

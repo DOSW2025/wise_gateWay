@@ -58,6 +58,6 @@ export const envs = {
   protocol: envVars.AUTH_PROTOCOL,
   notificacionesAzure: envVars.NOTIFICACIONES_AZURE,
   notificacionesPort: envVars.NOTIFICACIONES_PORT,
-  iaAzure: envVars.IA_AZURE || '',
-  iaPort: envVars.IA_PORT || '',
+  iaAzure: envVars.IA_AZURE,
+  iaPort: envVars.IA_PORT,
 };

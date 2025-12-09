@@ -1,10 +1,13 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Query, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { envs } from 'src/config';
+import { RecommendationsRequestDto } from 'src/ia/dto/recommendations-request.dto';
+import { ChatRequestDto } from 'src/ia/dto/chat-request.dto';
 
 @Injectable()
 export class IaService {
+  private readonly logger = new Logger(IaService.name);
   private readonly baseUrl: string;
 
   constructor(private readonly httpService: HttpService) {
@@ -50,7 +53,7 @@ export class IaService {
     }
   }
 
-  async getRecommendations(body: any) {
+  async getRecommendations(body: RecommendationsRequestDto) {
     try {
       const response = await firstValueFrom(
         this.httpService.post(`${this.baseUrl}/api/chat/recommendations`, body),
@@ -64,8 +67,7 @@ export class IaService {
     }
   }
 
-
-  async chat(body: any) {
+  async chat(body: ChatRequestDto) {
     try {
       const response = await firstValueFrom(
         this.httpService.post(`${this.baseUrl}/api/chat`, body),
@@ -81,21 +83,40 @@ export class IaService {
 
   async chatNavigation(message: string) {
     try {
-      console.log(`[ChatNavigation] Request received at ${new Date().toISOString()} with message: "${message}"`);
+      this.logger.log(`Request received with message: "${message}"`);
 
       const response = await firstValueFrom(
         this.httpService.post(`${this.baseUrl}/api/chat/nav`, { message }),
       );
 
-      if (!response.data || typeof response.data !== 'object' || !response.data.data || !('reply' in response.data.data)) {
+      if (!response.data) {
         throw new HttpException(
-          'Invalid response from backend: Missing reply field',
+          'Invalid response from backend: Missing "data" field in response',
+          HttpStatus.BAD_GATEWAY,
+        );
+      }
+      if (typeof response.data !== 'object') {
+        throw new HttpException(
+          'Invalid response from backend: "data" field is not an object',
+          HttpStatus.BAD_GATEWAY,
+        );
+      }
+      if (!response.data.data) {
+        throw new HttpException(
+          'Invalid response from backend: Missing "data.data" field in response',
+          HttpStatus.BAD_GATEWAY,
+        );
+      }
+      if (!('reply' in response.data.data)) {
+        throw new HttpException(
+          'Invalid response from backend: Missing "reply" field in data.data',
           HttpStatus.BAD_GATEWAY,
         );
       }
 
       return response.data.data.reply;
     } catch (error) {
+      this.logger.error(`Error in chatNavigation: ${error.message}`);
       throw new HttpException(
         `Failed to process chat navigation request: ${error.message}`,
         HttpStatus.BAD_GATEWAY,
