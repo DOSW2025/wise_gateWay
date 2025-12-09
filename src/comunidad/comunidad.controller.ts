@@ -86,6 +86,77 @@ export class ComunidadController {
         return this.comunidadService.getForumById(forumId, request);
     }
 
+    @Post('forums/:id/close')
+    @ApiOperation({
+        summary: 'Cerrar un foro',
+        description: 'Cierra un foro existente (solo creador)',
+    })
+    @ApiParam({ name: 'id', description: 'ID del foro' })
+    @ApiResponse({
+        status: 200,
+        description: 'Foro cerrado exitosamente',
+    })
+    async closeForum(
+        @Param('id') forumId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.closeForum(forumId, body, request);
+    }
+
+    @Post('forums/:id/edit')
+    @ApiOperation({
+        summary: 'Editar un foro',
+        description: 'Edita un foro existente (solo creador)',
+    })
+    @ApiParam({ name: 'id', description: 'ID del foro' })
+    @ApiResponse({
+        status: 200,
+        description: 'Foro editado exitosamente',
+    })
+    async editForum(
+        @Param('id') forumId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.editForum(forumId, body, request);
+    }
+
+    @Post('forums/:id/like')
+    @ApiOperation({
+        summary: 'Dar like a un foro',
+        description: 'Registra un like en un foro',
+    })
+    @ApiParam({ name: 'id', description: 'ID del foro' })
+    @ApiResponse({
+        status: 200,
+        description: 'Like registrado exitosamente',
+    })
+    async likeForum(
+        @Param('id') forumId: string,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.likeForum(forumId, request);
+    }
+
+    @Post('forums/:id/threads')
+    @ApiOperation({
+        summary: 'Crear un hilo en un foro',
+        description: 'Crea un nuevo hilo de conversación en un foro',
+    })
+    @ApiParam({ name: 'id', description: 'ID del foro' })
+    @ApiResponse({
+        status: 201,
+        description: 'Hilo creado exitosamente',
+    })
+    async createThreadInForum(
+        @Param('id') forumId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.createThreadInForum(forumId, body, request);
+    }
+
     // ============ CHATS - Direct routes ============
 
     @Get('chats')
@@ -143,6 +214,55 @@ export class ComunidadController {
         return this.comunidadService.getThreads(request);
     }
 
+    @Get('threads/:id')
+    @ApiOperation({
+        summary: 'Obtener un thread por ID',
+        description: 'Obtiene los detalles de un hilo específico',
+    })
+    @ApiParam({ name: 'id', description: 'ID del thread' })
+    @ApiResponse({
+        status: 200,
+        description: 'Thread obtenido exitosamente',
+    })
+    async getThreadById(@Param('id') threadId: string, @Req() request: Request) {
+        return this.comunidadService.getThreadById(threadId, request);
+    }
+
+    @Post('threads/:id/edit')
+    @ApiOperation({
+        summary: 'Editar un thread',
+        description: 'Edita un thread existente',
+    })
+    @ApiParam({ name: 'id', description: 'ID del thread' })
+    @ApiResponse({
+        status: 200,
+        description: 'Thread editado exitosamente',
+    })
+    async editThread(
+        @Param('id') threadId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.editThread(threadId, body, request);
+    }
+
+    @Post('threads/:id/like')
+    @ApiOperation({
+        summary: 'Dar like a un thread',
+        description: 'Registra un like en un thread',
+    })
+    @ApiParam({ name: 'id', description: 'ID del thread' })
+    @ApiResponse({
+        status: 200,
+        description: 'Like registrado exitosamente',
+    })
+    async likeThread(
+        @Param('id') threadId: string,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.likeThread(threadId, request);
+    }
+
     // ============ RESPONSES - Direct routes ============
 
     @Get('responses')
@@ -156,6 +276,55 @@ export class ComunidadController {
     })
     async getResponses(@Req() request: Request) {
         return this.comunidadService.getResponses(request);
+    }
+
+    @Get('responses/:id')
+    @ApiOperation({
+        summary: 'Obtener una respuesta por ID',
+        description: 'Obtiene los detalles de una respuesta específica',
+    })
+    @ApiParam({ name: 'id', description: 'ID de la respuesta' })
+    @ApiResponse({
+        status: 200,
+        description: 'Respuesta obtenida exitosamente',
+    })
+    async getResponseById(@Param('id') responseId: string, @Req() request: Request) {
+        return this.comunidadService.getResponseById(responseId, request);
+    }
+
+    @Post('responses/:id/vote')
+    @ApiOperation({
+        summary: 'Votar una respuesta',
+        description: 'Registra un voto positivo o negativo en una respuesta',
+    })
+    @ApiParam({ name: 'id', description: 'ID de la respuesta' })
+    @ApiResponse({
+        status: 200,
+        description: 'Voto registrado exitosamente',
+    })
+    async voteResponse(
+        @Param('id') responseId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.voteResponse(responseId, body, request);
+    }
+
+    @Get('responses/:id/votes')
+    @ApiOperation({
+        summary: 'Obtener votos de una respuesta',
+        description: 'Obtiene información de votos de una respuesta',
+    })
+    @ApiParam({ name: 'id', description: 'ID de la respuesta' })
+    @ApiResponse({
+        status: 200,
+        description: 'Votos obtenidos exitosamente',
+    })
+    async getResponseVotes(
+        @Param('id') responseId: string,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.getResponseVotes(responseId, request);
     }
 
     // ============ VOTES - Direct routes ============

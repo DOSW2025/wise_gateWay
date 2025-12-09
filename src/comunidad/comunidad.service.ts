@@ -99,6 +99,82 @@ export class ComunidadService {
     }
 
     /**
+     * Proxy para cerrar un foro
+     */
+    async closeForum(forumId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/forums/${forumId}/close`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para editar un foro
+     */
+    async editForum(forumId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/forums/${forumId}/edit`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para dar like a un foro
+     */
+    async likeForum(forumId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/forums/${forumId}/like`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, {}, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para crear un hilo en un foro
+     */
+    async createThreadInForum(forumId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/forums/${forumId}/threads`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
      * Proxy para obtener todos los chats/grupos
      */
     async getAllChats(request: Request) {
@@ -175,11 +251,125 @@ export class ComunidadService {
     }
 
     /**
+     * Proxy para obtener un thread por ID
+     */
+    async getThreadById(threadId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/threads/${threadId}`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para editar un thread
+     */
+    async editThread(threadId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/threads/${threadId}/edit`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para dar like a un thread
+     */
+    async likeThread(threadId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/threads/${threadId}/like`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, {}, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
      * Proxy para obtener respuestas/responses
      */
     async getResponses(request: Request) {
         const config = JwtForwardingHelper.getAxiosConfig(request);
         const url = `${this.comunidadServiceUrl}/responses`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener una respuesta por ID
+     */
+    async getResponseById(responseId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/responses/${responseId}`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para votar una respuesta
+     */
+    async voteResponse(responseId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/responses/${responseId}/vote`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener votos de una respuesta
+     */
+    async getResponseVotes(responseId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/responses/${responseId}/votes`;
 
         try {
             this.logger.log(`Forwarding GET request to: ${url}`);
