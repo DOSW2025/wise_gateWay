@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, HttpStatus, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, ValidationPipe, Logger } from '@nestjs/common';
 import { IaService } from './ia.service';
-import { Logger } from '@nestjs/common';
 import { ChatDto } from './dto/chat.dto';
-import { RecommendationsDto } from './dto/recommendations.dto';
+import { RecommendationsRequestDto } from './dto/recommendations-request.dto';
 import { ChatNavigationDto } from './dto/chat-navigation.dto';
 
 @Controller('ia')
@@ -29,7 +28,7 @@ export class IaController {
   }
 
   @Post('chat/recommendations')
-  async getRecommendations(@Body(new ValidationPipe()) body: RecommendationsDto) {
+  async getRecommendations(@Body(new ValidationPipe()) body: RecommendationsRequestDto) {
     return this.iaService.getRecommendations(body);
   }
 

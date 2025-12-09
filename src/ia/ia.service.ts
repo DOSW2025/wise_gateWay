@@ -116,6 +116,9 @@ export class IaService {
 
       return response.data.data.reply;
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       this.logger.error(`Error in chatNavigation: ${error.message}`);
       throw new HttpException(
         `Failed to process chat navigation request: ${error.message}`,
