@@ -25,16 +25,6 @@ export class IaController {
     return this.iaService.getHealthStatus();
   }
 
-  @Post('simulation/analysis')
-  async simulateAnalysis(@Body(new ValidationPipe()) body: SimulateAnalysisDto) {
-    return this.iaService.simulateAnalysis(body);
-  }
-
-  @Post('simulation/save')
-  async simulateSave(@Body(new ValidationPipe()) body: SimulateSaveDto) {
-    return this.iaService.simulateSave(body);
-  }
-
   @Post('chat')
   async chat(@Body(new ValidationPipe()) body: ChatDto) {
     console.log('Chat endpoint hit with body:', body);

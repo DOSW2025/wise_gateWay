@@ -50,20 +50,6 @@ export class IaService {
     }
   }
 
-  async simulateAnalysis(body: any) {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post(`${this.baseUrl}/analyze`, body),
-      );
-      return response.data;
-    } catch (error) {
-      throw new HttpException(
-        `Failed to simulate analysis: ${error.message}`,
-        HttpStatus.BAD_GATEWAY,
-      );
-    }
-  }
-
   async getRecommendations(body: any) {
     try {
       const response = await firstValueFrom(
@@ -78,19 +64,6 @@ export class IaService {
     }
   }
 
-  async simulateSave(body: any) {
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post(`${this.baseUrl}/save`, body),
-      );
-      return response.data;
-    } catch (error) {
-      throw new HttpException(
-        `Failed to simulate save: ${error.message}`,
-        HttpStatus.BAD_GATEWAY,
-      );
-    }
-  }
 
   async chat(body: any) {
     try {
@@ -108,7 +81,6 @@ export class IaService {
 
   async chatNavigation(message: string) {
     try {
-      // Log básico para registrar la solicitud
       console.log(`[ChatNavigation] Request received at ${new Date().toISOString()} with message: "${message}"`);
 
       const response = await firstValueFrom(
