@@ -17,6 +17,8 @@ interface EnvVars {
   NOTIFICACIONES_AZURE?: string;
   NOTIFICACIONES_PORT?: number;
   COMUNIDAD_AZURE?: string;
+  IA_AZURE?: string;
+  IA_PORT?: number;
 }
 
 const envsSchema = joi
@@ -36,6 +38,8 @@ const envsSchema = joi
     NOTIFICACIONES_AZURE: joi.string().optional(),
     NOTIFICACIONES_PORT: joi.number().optional(),
     COMUNIDAD_AZURE: joi.string().optional(),
+    IA_AZURE: joi.string().optional(),
+    IA_PORT: joi.number().optional(),
   })
   .unknown(true);
 
@@ -63,4 +67,6 @@ export const envs = {
   notificacionesAzure: envVars.NOTIFICACIONES_AZURE,
   notificacionesPort: envVars.NOTIFICACIONES_PORT,
   comunidadAzure: envVars.COMUNIDAD_AZURE,
+  iaAzure: envVars.IA_AZURE,
+  iaPort: envVars.IA_PORT,
 };
