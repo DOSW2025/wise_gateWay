@@ -221,5 +221,10 @@ export class TutoriasController {
   findUpcomingSessions(@Param('userId') userId: string, @Request() req: ExpressRequest) {
     return this.tutoriasService.findUpcomingSessions(userId, req);
   }
+
+  @Get('stats/:userId')
+  getUserSessionStats(@Param('userId') userId: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.getUserSessionStats(userId, req);
+  }
 }
 

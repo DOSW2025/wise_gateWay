@@ -393,4 +393,17 @@ export class TutoriasService {
         throw error;
       }
     }
+
+    async getUserSessionStats(userId: string, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/sessions/stats/${userId}`;
+      try {
+        this.logger.log(`Forwarding GET request to: ${url}`);
+        const response = await firstValueFrom(this.httpService.get(url, config));
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding GET /api/sessions/stats/${userId}`, error);
+        throw error;
+      }
+    }
 }
