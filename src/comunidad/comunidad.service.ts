@@ -434,6 +434,8 @@ export class ComunidadService {
                 case 'DELETE':
                     response = await firstValueFrom(this.httpService.delete(url, config));
                     break;
+                default:
+                    throw new Error(`Unsupported HTTP method: ${method}`);
             }
 
             return response.data;
