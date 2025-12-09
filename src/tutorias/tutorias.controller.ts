@@ -216,5 +216,10 @@ export class TutoriasController {
   findByCodigo(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
     return this.tutoriasService.findByCodigo(codigo, req);
   }
+
+  @Get('upcoming/:userId')
+  findUpcomingSessions(@Param('userId') userId: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.findUpcomingSessions(userId, req);
+  }
 }
 
