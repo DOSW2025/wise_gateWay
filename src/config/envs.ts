@@ -7,6 +7,8 @@ interface EnvVars {
   AUTH_PORT: number;
   USER_MANAGEMENT_HOST: string;
   USER_MANAGEMENT_PORT: number;
+  COMUNIDAD_HOST: string;
+  COMUNIDAD_PORT: number;
   JWT_SECRET: string;
   FRONTEND_URL: string;
   AUTH_AZURE?: string;
@@ -14,6 +16,7 @@ interface EnvVars {
   AUTH_PROTOCOL?: string;
   NOTIFICACIONES_AZURE?: string;
   NOTIFICACIONES_PORT?: number;
+  COMUNIDAD_AZURE?: string;
 }
 
 const envsSchema = joi
@@ -23,6 +26,8 @@ const envsSchema = joi
     AUTH_PORT: joi.number().required(),
     USER_MANAGEMENT_HOST: joi.string().required(),
     USER_MANAGEMENT_PORT: joi.number().required(),
+    COMUNIDAD_HOST: joi.string().required(),
+    COMUNIDAD_PORT: joi.number().required(),
     JWT_SECRET: joi.string().required(),
     FRONTEND_URL: joi.string().required(),
     AUTH_AZURE: joi.string().optional(),
@@ -30,6 +35,7 @@ const envsSchema = joi
     AUTH_PROTOCOL: joi.string().valid('http', 'https').default('http'),
     NOTIFICACIONES_AZURE: joi.string().optional(),
     NOTIFICACIONES_PORT: joi.number().optional(),
+    COMUNIDAD_AZURE: joi.string().optional(),
   })
   .unknown(true);
 
@@ -47,6 +53,8 @@ export const envs = {
   authPort: envVars.AUTH_PORT,
   userManagementHost: envVars.USER_MANAGEMENT_HOST,
   userManagementPort: envVars.USER_MANAGEMENT_PORT,
+  comunidadHost: envVars.COMUNIDAD_HOST,
+  comunidadPort: envVars.COMUNIDAD_PORT,
   jwtSecret: envVars.JWT_SECRET,
   frontendUrl: envVars.FRONTEND_URL.startsWith('http') ? envVars.FRONTEND_URL : `https://${envVars.FRONTEND_URL}`,
   authAzure: envVars.AUTH_AZURE,
@@ -54,4 +62,5 @@ export const envs = {
   protocol: envVars.AUTH_PROTOCOL,
   notificacionesAzure: envVars.NOTIFICACIONES_AZURE,
   notificacionesPort: envVars.NOTIFICACIONES_PORT,
+  comunidadAzure: envVars.COMUNIDAD_AZURE,
 };
