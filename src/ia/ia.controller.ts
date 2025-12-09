@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, HttpStatus, ValidationPipe } from '@nestjs
 import { IaService } from './ia.service';
 import { Logger } from '@nestjs/common';
 import { ChatDto } from './dto/chat.dto';
-import { SimulateAnalysisDto } from './dto/simulate-analysis.dto';
 import { SimulateSaveDto } from './dto/simulate-save.dto';
 import { RecommendationsDto } from './dto/recommendations.dto';
 import { ChatNavigationDto } from './dto/chat-navigation.dto';
