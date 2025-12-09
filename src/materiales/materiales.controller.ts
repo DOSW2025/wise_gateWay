@@ -82,6 +82,19 @@ export class MaterialesController {
   }
 
   /**
+   * GET /materiales/:id
+   * Obtener información detallada de un material específico
+   */
+  @Get(':id')
+  async getMaterialDetail(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getMaterialDetail(id, request);
+  }
+
+
+  /**
    * GET /materiales/:id/download
    * Descargar un material específico
    */
