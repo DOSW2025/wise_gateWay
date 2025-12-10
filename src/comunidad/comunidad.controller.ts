@@ -265,6 +265,19 @@ export class ComunidadController {
 
     // ============ RESPONSES - Direct routes ============
 
+    @Post('responses')
+    @ApiOperation({
+        summary: 'Crear una respuesta',
+        description: 'Crea una nueva respuesta a un hilo',
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Respuesta creada exitosamente',
+    })
+    async createResponse(@Body() body: any, @Req() request: Request) {
+        return this.comunidadService.createResponse(body, request);
+    }
+
     @Get('responses')
     @ApiOperation({
         summary: 'Obtener todas las respuestas',
