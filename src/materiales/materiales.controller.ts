@@ -1,4 +1,4 @@
-import {Controller,Param,Req,Get,Post,Put,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,} from '@nestjs/common';
+import {Controller,Param,Req,Get,Post,Put,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,Logger,} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaterialesService } from './materiales.service';
 import type { Request, Response, Express } from 'express';
@@ -7,6 +7,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @Controller('materiales')
 @UseGuards(JwtAuthGuard)
 export class MaterialesController {
+  private readonly logger = new Logger(MaterialesController.name);
+
   constructor(private readonly materialesService: MaterialesService) {}
 
   /**
@@ -73,6 +75,19 @@ export class MaterialesController {
   }
 
   /**
+   * GET /materiales/:id/download
+   * Descargar un material específico
+   */
+  @Get(':id/download')
+  async downloadMaterial(
+    @Param('id') materialId: string,
+    @Res() res: Response,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.downloadMaterial(materialId, res, request);
+  }
+
+  /**
    * GET /materiales/filter
    * Filtrar materiales con filtros avanzados y paginación
    */
@@ -93,19 +108,7 @@ export class MaterialesController {
     return this.materialesService.getMaterialDetail(id, request);
   }
 
-
-  /**
-   * GET /materiales/:id/download
-   * Descargar un material específico
-   */
-  @Get(':id/download')
-  async downloadMaterial(
-    @Param('id') materialId: string,
-    @Res() res: Response,
-    @Req() request: Request,
-  ) {
-    return this.materialesService.downloadMaterial(materialId, res, request);
-  }
+  
 
   /**
    * GET /materiales/autocomplete

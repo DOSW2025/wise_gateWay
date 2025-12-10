@@ -48,10 +48,10 @@ export class PdfExportService {
       }
 
       // Pipear el stream al cliente
-      response.data.pipe(res);
+      (response.data as NodeJS.ReadableStream).pipe(res);
 
       // Manejar errores del stream
-      response.data.on('error', (error: any) => {
+      (response.data as NodeJS.ReadableStream).on('error', (error: any) => {
         this.logger.error(`Error in stream: ${error?.message ?? error}`);
         if (!res.headersSent) {
           res.status(500).send('Error descargando el archivo');
