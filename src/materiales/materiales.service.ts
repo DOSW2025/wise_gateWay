@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { HttpService } from '@nestjs/axios';
+import axios from 'axios';
 import { envs } from 'src/config';
 import { JwtForwardingHelper } from 'src/common/helpers';
 import { firstValueFrom } from 'rxjs';
@@ -22,7 +23,7 @@ export class MaterialesService {
       url = `https://${url}`;
     }
 
-    this.materialesServiceUrl = url;
+    this.materialesServiceUrl = url + '/material';
   }
 
   /**
@@ -189,15 +190,19 @@ export class MaterialesService {
    * Descargar material
    */
   async downloadMaterial(materialId: string, res: Response, request: Request) {
-    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const baseConfig = JwtForwardingHelper.getAxiosConfig(request);
+    const config = {
+      ...baseConfig,
+      responseType: 'stream' as const,
+    };
     
     const url = `${this.materialesServiceUrl}/${materialId}/download`;
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      
+      // Usar axios directamente para obtener el stream
+      const response = await axios.get(url, config);
 
       // Propagar headers del microservicio al cliente
       if (response.headers['content-type']) {
@@ -209,8 +214,19 @@ export class MaterialesService {
 
       // Pipear el stream al cliente
       response.data.pipe(res);
+
+      // Manejar errores del stream
+      response.data.on('error', (error: any) => {
+        this.logger.error(`Error in stream: ${error?.message ?? error}`);
+        if (!res.headersSent) {
+          res.status(500).send('Error descargando el archivo');
+        }
+      });
     } catch (error) {
       this.logger.error(`Error downloading material`, error);
+      if (!res.headersSent) {
+        res.status(500).json({ message: 'Error descargando el archivo' });
+      }
       throw error;
     }
   }
