@@ -68,6 +68,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       } else {
         message = exceptionResponse as string;
       }
+
+      this.logger.warn(
+        `HTTP ${status} on ${request.method} ${request.url}: ${JSON.stringify(message)}`,
+      );
     }
     
     else if (exception instanceof Error) {
