@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { JwtForwardingHelper } from 'src/common/helpers';
 import { envs } from 'src/config';
 import axios from 'axios';
