@@ -104,6 +104,24 @@ export class ComunidadController {
         return this.comunidadService.closeForum(forumId, body, request);
     }
 
+    @Post('forums/:id/reopen')
+    @ApiOperation({
+        summary: 'Reabrir un foro',
+        description: 'Reabre un foro cerrado (solo creador)',
+    })
+    @ApiParam({ name: 'id', description: 'ID del foro' })
+    @ApiResponse({
+        status: 200,
+        description: 'Foro reabierto exitosamente',
+    })
+    async reopenForum(
+        @Param('id') forumId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.reopenForum(forumId, body, request);
+    }
+
     @Post('forums/:id/edit')
     @ApiOperation({
         summary: 'Editar un foro',
