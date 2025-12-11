@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NotificacionesModule } from './notificaciones/notificaciones.module';
@@ -6,9 +8,17 @@ import { MaterialesModule } from './materiales/materiales.module';
 import { PdfExportModule } from './pdf-export/pdf-export.module';
 import { ComunidadModule } from './comunidad/comunidad.module';
 import { IaModule } from './ia/ia.module';
+import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.filter';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 60000,
+        limit: 60,
+      },
+    ]),
     AuthModule,
     UserManagementModule,
     NotificacionesModule,
@@ -18,6 +28,11 @@ import { IaModule } from './ia/ia.module';
     ComunidadModule
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ThrottlerExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

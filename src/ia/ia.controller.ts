@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, ValidationPipe, Logger } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { IaService } from './ia.service';
 import { ChatDto } from './dto/chat.dto';
 import { RecommendationsRequestDto } from './dto/recommendations-request.dto';
@@ -22,16 +23,19 @@ export class IaController {
     return this.iaService.getHealthStatus();
   }
 
+  @Throttle({ short: { limit: 60, ttl: 60000 } })
   @Post('chat')
   async chat(@Body(new ValidationPipe()) body: ChatDto) {
     return this.iaService.chat(body);
   }
 
+  @Throttle({ short: { limit: 60, ttl: 60000 } })
   @Post('chat/recommendations')
   async getRecommendations(@Body(new ValidationPipe()) body: RecommendationsRequestDto) {
     return this.iaService.getRecommendations(body);
   }
 
+  @Throttle({ short: { limit: 60, ttl: 60000 } })
   @Post('chat/nav')
   async chatNavigation(@Body(new ValidationPipe()) chatNavigationDto: ChatNavigationDto) {
     const { message } = chatNavigationDto;

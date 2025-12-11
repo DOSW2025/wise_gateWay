@@ -7,7 +7,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { AxiosError } from 'axios';
 import {
   ErrorResponse,
   MicroserviceErrorResponse,
@@ -28,7 +27,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     // Manejar errores de Axios (errores del microservicio)
     if (this.isAxiosError(exception)) {
-      const axiosError = exception;
+      const axiosError = exception as any;
 
       if (axiosError.response) {
         // El microservicio respondió con un error
@@ -55,9 +54,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
     }
     // Manejar HttpException de NestJS
-    else if (exception instanceof HttpException) {
-      status = exception.getStatus();
-      const exceptionResponse = exception.getResponse();
+    else if (exception && typeof exception === 'object' && 'getStatus' in exception) {
+      const httpException = exception as HttpException;
+      status = httpException.getStatus();
+      const exceptionResponse = httpException.getResponse();
 
       if (typeof exceptionResponse === 'object') {
         const responseObject = exceptionResponse as Record<string, unknown>;
@@ -74,9 +74,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       );
     }
     
-    else if (exception instanceof Error) {
-      message = exception.message;
-      this.logger.error('Unexpected error:', exception.stack);
+    else if (exception && typeof exception === 'object' && exception instanceof Error) {
+      const error = exception as Error;
+      message = error.message;
+      this.logger.error('Unexpected error:', error.stack);
     }
 
     const errorResponse: ErrorResponse = {
@@ -90,12 +91,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     response.status(status).json(errorResponse);
   }
 
-  private isAxiosError(error: unknown): error is AxiosError {
+  private isAxiosError(error: unknown): boolean {
     return (
       typeof error === 'object' &&
       error !== null &&
       'isAxiosError' in error &&
-      error.isAxiosError === true
+      (error as any).isAxiosError === true
     );
   }
 }

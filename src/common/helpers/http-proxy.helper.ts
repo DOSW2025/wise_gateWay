@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, catchError, Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
 
 export interface ProxyResponse {
   data: unknown;
@@ -38,7 +37,7 @@ export class HttpProxyHelper {
       headers['authorization'] = authHeader;
     }
 
-    let request: Observable<AxiosResponse<unknown>>;
+    let request: Observable<any>;
 
     switch (method) {
       case 'GET':
