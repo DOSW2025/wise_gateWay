@@ -24,7 +24,7 @@ export class ThrottlerExceptionFilter implements ExceptionFilter {
     response.status(HttpStatus.TOO_MANY_REQUESTS).json({
       success: false,
       statusCode: HttpStatus.TOO_MANY_REQUESTS,
-      message: 'Has excedido el límite de solicitudes. Intenta de nuevo en un minuto.',
+      message: 'You have exceeded the request limit. Please try again in one minute',
       error: 'Too Many Requests',
       timestamp: new Date().toISOString(),
       path: request.url,
