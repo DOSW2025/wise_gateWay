@@ -232,5 +232,10 @@ export class TutoriasController {
     return this.tutoriasService.getPendingSessions(id, req);
   }
 
+  @Get(':id/confirmed-sessions')
+  getConfirmedSessions(@Param('id') id: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.getConfirmedSessions(id, req);
+  }
+
 }
 
