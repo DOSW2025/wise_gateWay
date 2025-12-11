@@ -5,6 +5,13 @@ import { ChatDto } from './dto/chat.dto';
 import { RecommendationsRequestDto } from './dto/recommendations-request.dto';
 import { ChatNavigationDto } from './dto/chat-navigation.dto';
 
+/**
+ * Configuración de rate limiting para endpoints de chat
+ * Límite: 60 solicitudes por minuto
+ */
+const CHAT_THROTTLE_CONFIG = { short: { limit: 60, ttl: 60000 } };
+
+@Throttle(CHAT_THROTTLE_CONFIG)
 @Controller('ia')
 export class IaController {
   private readonly logger = new Logger(IaController.name);
@@ -23,19 +30,16 @@ export class IaController {
     return this.iaService.getHealthStatus();
   }
 
-  @Throttle({ short: { limit: 60, ttl: 60000 } })
   @Post('chat')
   async chat(@Body(new ValidationPipe()) body: ChatDto) {
     return this.iaService.chat(body);
   }
 
-  @Throttle({ short: { limit: 60, ttl: 60000 } })
   @Post('chat/recommendations')
   async getRecommendations(@Body(new ValidationPipe()) body: RecommendationsRequestDto) {
     return this.iaService.getRecommendations(body);
   }
 
-  @Throttle({ short: { limit: 60, ttl: 60000 } })
   @Post('chat/nav')
   async chatNavigation(@Body(new ValidationPipe()) chatNavigationDto: ChatNavigationDto) {
     const { message } = chatNavigationDto;

@@ -12,6 +12,20 @@ import {
   MicroserviceErrorResponse,
 } from '../interfaces/error-response.interface';
 
+/**
+ * Interfaz mínima para tipos de error de Axios
+ * Define la estructura esperada sin depender de tipos externos
+ */
+interface AxiosErrorLike {
+  isAxiosError: boolean;
+  response?: {
+    status: number;
+    data: unknown;
+  };
+  request?: unknown;
+  message: string;
+}
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -25,12 +39,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let message: string | string[] = 'Internal server error';
     let error = 'Internal Server Error';
 
-    // Manejar errores de Axios (errores del microservicio)
     if (this.isAxiosError(exception)) {
-      const axiosError = exception as any;
+      const axiosError = exception as AxiosErrorLike;
 
       if (axiosError.response) {
-        // El microservicio respondió con un error
         status = axiosError.response.status;
         const responseData =
           axiosError.response.data as MicroserviceErrorResponse;
@@ -45,7 +57,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
         response.status(status).json(responseData);
         return;
       } else if (axiosError.request) {
-        // La petición se hizo pero no hubo respuesta
         status = HttpStatus.SERVICE_UNAVAILABLE;
         message = 'Microservice is not available';
         error = 'Service Unavailable';
@@ -53,11 +64,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
         this.logger.error('Microservice not available:', axiosError.message);
       }
     }
-    // Manejar HttpException de NestJS
-    else if (exception && typeof exception === 'object' && 'getStatus' in exception) {
-      const httpException = exception as HttpException;
-      status = httpException.getStatus();
-      const exceptionResponse = httpException.getResponse();
+    else if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      const exceptionResponse = exception.getResponse();
 
       if (typeof exceptionResponse === 'object') {
         const responseObject = exceptionResponse as Record<string, unknown>;
@@ -74,10 +83,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
       );
     }
     
-    else if (exception && typeof exception === 'object' && exception instanceof Error) {
-      const error = exception as Error;
-      message = error.message;
-      this.logger.error('Unexpected error:', error.stack);
+    else if (exception instanceof Error) {
+      message = exception.message;
+      this.logger.error('Unexpected error:', exception.stack);
     }
 
     const errorResponse: ErrorResponse = {
@@ -91,12 +99,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     response.status(status).json(errorResponse);
   }
 
-  private isAxiosError(error: unknown): boolean {
+  private isAxiosError(error: unknown): error is AxiosErrorLike {
     return (
       typeof error === 'object' &&
       error !== null &&
       'isAxiosError' in error &&
-      (error as any).isAxiosError === true
+      (error as AxiosErrorLike).isAxiosError === true
     );
   }
 }
