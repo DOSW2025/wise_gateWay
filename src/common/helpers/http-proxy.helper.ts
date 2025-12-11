@@ -2,8 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, catchError, Observable } from 'rxjs';
 
 /**
- * Tipo para respuesta HTTP de Axios
- * Proporciona type safety para el objeto de respuesta
+ * Tipo para respuesta HTTP de Axios.
+ * Proporciona type safety para el objeto de respuesta.
  */
 interface AxiosResponseData {
   data: unknown;

@@ -13,8 +13,8 @@ import {
 } from '../interfaces/error-response.interface';
 
 /**
- * Interfaz mínima para tipos de error de Axios
- * Define la estructura esperada sin depender de tipos externos
+ * Interfaz mínima para tipos de error de Axios.
+ * Define la estructura esperada sin depender de tipos externos.
  */
 interface AxiosErrorLike {
   isAxiosError: boolean;

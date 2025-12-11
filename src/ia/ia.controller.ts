@@ -6,8 +6,8 @@ import { RecommendationsRequestDto } from './dto/recommendations-request.dto';
 import { ChatNavigationDto } from './dto/chat-navigation.dto';
 
 /**
- * Configuración de rate limiting para endpoints de chat
- * Límite: 60 solicitudes por minuto
+ * Configuración de rate limiting para endpoints de chat.
+ * Límite: 60 solicitudes por minuto.
  */
 const CHAT_THROTTLE_CONFIG = { short: { limit: 60, ttl: 60000 } };
 
