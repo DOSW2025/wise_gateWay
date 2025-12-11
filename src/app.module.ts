@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NotificacionesModule } from './notificaciones/notificaciones.module';
@@ -29,6 +29,10 @@ import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.f
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_FILTER,
       useClass: ThrottlerExceptionFilter,
