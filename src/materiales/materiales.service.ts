@@ -27,6 +27,30 @@ export class MaterialesService {
   }
 
   /**
+   * Preparar FormData con archivo y campos adicionales
+   */
+  private prepareFormDataWithFile(file: Express.Multer.File, body: any, config: any) {
+    const formData = new FormData();
+    formData.append('file', file.buffer, {
+      filename: file.originalname,
+      contentType: file.mimetype,
+    });
+
+    // Agregar los campos del body
+    Object.keys(body).forEach((key) => {
+      formData.append(key, body[key]);
+    });
+
+    // Agregar headers del FormData a la configuración
+    config.headers = {
+      ...config.headers,
+      ...formData.getHeaders(),
+    };
+
+    return formData;
+  }
+
+  /**
    * Subir un nuevo material
    */
   async subirNuevoMaterial(file: Express.Multer.File, body: any, request: Request) {
@@ -34,22 +58,7 @@ export class MaterialesService {
     const url = `${this.materialesServiceUrl}`;
 
     try {
-      const formData = new FormData();
-      formData.append('file', file.buffer, {
-        filename: file.originalname,
-        contentType: file.mimetype,
-      });
-
-      // Agregar los campos del body
-      Object.keys(body).forEach((key) => {
-        formData.append(key, body[key]);
-      });
-
-      // Agregar headers del FormData a la configuración
-      config.headers = {
-        ...config.headers,
-        ...formData.getHeaders(),
-      };
+      const formData = this.prepareFormDataWithFile(file, body, config);
 
       this.logger.log(`Forwarding POST request to: ${url}`);
       const response = await firstValueFrom(
@@ -257,22 +266,7 @@ export class MaterialesService {
     const url = `${this.materialesServiceUrl}/${materialId}`;
 
     try {
-      const formData = new FormData();
-      formData.append('file', file.buffer, {
-        filename: file.originalname,
-        contentType: file.mimetype,
-      });
-
-      // Agregar los campos del body
-      Object.keys(body).forEach((key) => {
-        formData.append(key, body[key]);
-      });
-
-      // Agregar headers del FormData a la configuración
-      config.headers = {
-        ...config.headers,
-        ...formData.getHeaders(),
-      };
+      const formData = this.prepareFormDataWithFile(file, body, config);
 
       this.logger.log(`Forwarding PUT request to: ${url}`);
       const response = await firstValueFrom(
