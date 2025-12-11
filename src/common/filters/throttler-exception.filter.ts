@@ -6,16 +6,16 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ThrottlerException } from '@nestjs/throttler';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Catch(ThrottlerException)
 export class ThrottlerExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(ThrottlerExceptionFilter.name);
 
-  catch(exception: ThrottlerException, host: ArgumentsHost) {
+  catch(exception: ThrottlerException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest();
+    const request = ctx.getRequest<Request>();
 
     this.logger.warn(
       `Rate limit exceeded for ${request.ip} - ${request.method} ${request.url}`,

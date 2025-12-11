@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, ValidationPipe, Logger } from '@nestjs/common';
-import { Throttle } from '@nestjs/throttler';
+import { Throttle, SkipThrottle } from '@nestjs/throttler';
 import { IaService } from './ia.service';
 import { ChatDto } from './dto/chat.dto';
 import { RecommendationsRequestDto } from './dto/recommendations-request.dto';
@@ -20,11 +20,13 @@ export class IaController {
      this.logger.log('IaController initialized');
   }
 
+  @SkipThrottle()
   @Get('swagger.json')
   async getSwaggerJson() {
     return this.iaService.getSwaggerJson();
   }
 
+  @SkipThrottle()
   @Get('health')
   async getHealth() {
     return this.iaService.getHealthStatus();
