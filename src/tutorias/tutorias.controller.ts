@@ -226,5 +226,11 @@ export class TutoriasController {
   getUserSessionStats(@Param('userId') userId: string, @Request() req: ExpressRequest) {
     return this.tutoriasService.getUserSessionStats(userId, req);
   }
+
+  @Get(':id/pending-sessions')
+  getPendingSessions(@Param('id') id: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.getPendingSessions(id, req);
+  }
+
 }
 

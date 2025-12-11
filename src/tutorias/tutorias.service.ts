@@ -406,4 +406,18 @@ export class TutoriasService {
         throw error;
       }
     }
+
+    async getPendingSessions(userId: string, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/tutors/${userId}/pending-sessions`;
+      try {
+        this.logger.log(`Forwarding GET request to: ${url}`);
+        const response = await firstValueFrom(this.httpService.get(url, config));
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding GET /api/tutors/${userId}/pending-sessions`, error);
+        throw error;
+      }
+    }
+
 }
