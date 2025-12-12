@@ -22,6 +22,7 @@ import {
 import type { Request } from 'express';
 import { ComunidadService } from './comunidad.service';
 import { JwtAuthGuard } from '../auth';
+import { CreateGroupDto, SendMessageBodyDto } from './dto';
 
 // Main controller with root prefix for direct routes like /forums, /chats, etc
 @ApiTags('Comunidad - Forums & Chats')
@@ -104,6 +105,24 @@ export class ComunidadController {
         return this.comunidadService.closeForum(forumId, body, request);
     }
 
+    @Post('forums/:id/reopen')
+    @ApiOperation({
+        summary: 'Reabrir un foro',
+        description: 'Reabre un foro cerrado (solo creador)',
+    })
+    @ApiParam({ name: 'id', description: 'ID del foro' })
+    @ApiResponse({
+        status: 200,
+        description: 'Foro reabierto exitosamente',
+    })
+    async reopenForum(
+        @Param('id') forumId: string,
+        @Body() body: any,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.reopenForum(forumId, body, request);
+    }
+
     @Post('forums/:id/edit')
     @ApiOperation({
         summary: 'Editar un foro',
@@ -181,7 +200,7 @@ export class ComunidadController {
         status: 201,
         description: 'Chat creado exitosamente',
     })
-    async createChat(@Body() createChatDto: any, @Req() request: Request) {
+    async createChat(@Body() createChatDto: CreateGroupDto, @Req() request: Request) {
         return this.comunidadService.createChat(createChatDto, request);
     }
 
@@ -197,6 +216,52 @@ export class ComunidadController {
     })
     async getChatById(@Param('id') chatId: string, @Req() request: Request) {
         return this.comunidadService.getChatById(chatId, request);
+    }
+
+    @Get('chats/:id/messages')
+    @ApiOperation({
+        summary: 'Obtener mensajes de un chat',
+        description: 'Obtiene todos los mensajes de un grupo de chat específico',
+    })
+    @ApiParam({ name: 'id', description: 'ID del chat' })
+    @ApiResponse({
+        status: 200,
+        description: 'Mensajes obtenidos exitosamente',
+    })
+    async getChatMessages(@Param('id') chatId: string, @Req() request: Request) {
+        return this.comunidadService.getChatMessages(chatId, request);
+    }
+
+    @Post('chats/:id/messages')
+    @ApiOperation({
+        summary: 'Enviar mensaje a un chat',
+        description: 'Envía un nuevo mensaje a un grupo de chat',
+    })
+    @ApiParam({ name: 'id', description: 'ID del chat' })
+    @ApiResponse({
+        status: 201,
+        description: 'Mensaje enviado exitosamente',
+    })
+    async sendChatMessage(
+        @Param('id') chatId: string,
+        @Body() sendMessageDto: SendMessageBodyDto,
+        @Req() request: Request
+    ) {
+        return this.comunidadService.sendChatMessage(chatId, sendMessageDto, request);
+    }
+
+    @Delete('chats/:id')
+    @ApiOperation({
+        summary: 'Eliminar un chat',
+        description: 'Elimina un grupo de chat',
+    })
+    @ApiParam({ name: 'id', description: 'ID del chat' })
+    @ApiResponse({
+        status: 200,
+        description: 'Chat eliminado exitosamente',
+    })
+    async deleteChat(@Param('id') chatId: string, @Req() request: Request) {
+        return this.comunidadService.deleteChat(chatId, request);
     }
 
     // ============ THREADS - Direct routes ============
@@ -264,6 +329,19 @@ export class ComunidadController {
     }
 
     // ============ RESPONSES - Direct routes ============
+
+    @Post('responses')
+    @ApiOperation({
+        summary: 'Crear una respuesta',
+        description: 'Crea una nueva respuesta a un hilo',
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Respuesta creada exitosamente',
+    })
+    async createResponse(@Body() body: any, @Req() request: Request) {
+        return this.comunidadService.createResponse(body, request);
+    }
 
     @Get('responses')
     @ApiOperation({
