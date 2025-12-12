@@ -4,10 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { envs } from '../config';
 import type { Request } from 'express';
 import { JwtForwardingHelper } from '../common/helpers';
-<<<<<<< HEAD
-=======
 import { CreateGroupDto, SendMessageBodyDto } from './dto';
->>>>>>> d6de4806ce4bffaeeaac798538a1dd12547431f9
 
 @Injectable()
 export class ComunidadService {
@@ -122,8 +119,6 @@ export class ComunidadService {
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Proxy para reabrir un foro
      */
     async reopenForum(forumId: string, body: any, request: Request) {
@@ -143,7 +138,6 @@ export class ComunidadService {
     }
 
     /**
->>>>>>> d6de4806ce4bffaeeaac798538a1dd12547431f9
      * Proxy para editar un foro
      */
     async editForum(forumId: string, body: any, request: Request) {
@@ -222,11 +216,7 @@ export class ComunidadService {
     /**
      * Proxy para crear un chat/grupo
      */
-<<<<<<< HEAD
-    async createChat(createChatDto: any, request: Request) {
-=======
     async createChat(createChatDto: CreateGroupDto, request: Request) {
->>>>>>> d6de4806ce4bffaeeaac798538a1dd12547431f9
         const config = JwtForwardingHelper.getAxiosConfig(request);
         const url = `${this.comunidadServiceUrl}/chats`;
 
@@ -262,8 +252,6 @@ export class ComunidadService {
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Proxy para obtener mensajes de un chat
      */
     async getChatMessages(chatId: string, request: Request) {
@@ -321,7 +309,6 @@ export class ComunidadService {
     }
 
     /**
->>>>>>> d6de4806ce4bffaeeaac798538a1dd12547431f9
      * Proxy para obtener threads
      */
     async getThreads(request: Request) {
@@ -398,8 +385,6 @@ export class ComunidadService {
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Proxy para crear una respuesta
      */
     async createResponse(body: any, request: Request) {
@@ -419,7 +404,6 @@ export class ComunidadService {
     }
 
     /**
->>>>>>> d6de4806ce4bffaeeaac798538a1dd12547431f9
      * Proxy para obtener respuestas/responses
      */
     async getResponses(request: Request) {
