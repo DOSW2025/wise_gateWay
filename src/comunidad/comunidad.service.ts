@@ -118,6 +118,25 @@ export class ComunidadService {
     }
 
     /**
+     * Proxy para reabrir un foro
+     */
+    async reopenForum(forumId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/forums/${forumId}/reopen`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
      * Proxy para editar un foro
      */
     async editForum(forumId: string, body: any, request: Request) {
