@@ -327,6 +327,25 @@ export class ComunidadService {
     }
 
     /**
+     * Proxy para crear una respuesta
+     */
+    async createResponse(body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/responses`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
      * Proxy para obtener respuestas/responses
      */
     async getResponses(request: Request) {
