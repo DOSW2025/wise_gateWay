@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { envs } from '../config';
 import type { Request } from 'express';
 import { JwtForwardingHelper } from '../common/helpers';
+import { CreateGroupDto, SendMessageBodyDto } from './dto';
 
 @Injectable()
 export class ComunidadService {
@@ -196,7 +197,7 @@ export class ComunidadService {
     /**
      * Proxy para crear un chat/grupo
      */
-    async createChat(createChatDto: any, request: Request) {
+    async createChat(createChatDto: CreateGroupDto, request: Request) {
         const config = JwtForwardingHelper.getAxiosConfig(request);
         const url = `${this.comunidadServiceUrl}/chats`;
 
@@ -223,6 +224,63 @@ export class ComunidadService {
             this.logger.log(`Forwarding GET request to: ${url}`);
             const response = await firstValueFrom(
                 this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener mensajes de un chat
+     */
+    async getChatMessages(chatId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/chats/${chatId}/messages`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para enviar un mensaje a un chat
+     */
+    async sendChatMessage(chatId: string, sendMessageDto: SendMessageBodyDto, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/chats/${chatId}/messages`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, sendMessageDto, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para eliminar un chat
+     */
+    async deleteChat(chatId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/chats/${chatId}`;
+
+        try {
+            this.logger.log(`Forwarding DELETE request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.delete(url, config),
             );
             return response.data;
         } catch (error) {
