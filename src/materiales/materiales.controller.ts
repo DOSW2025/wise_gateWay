@@ -37,6 +37,7 @@ export class MaterialesController {
     return this.materialesService.getMaterialsByUser(userId, request);
   }
 
+
   /**
    * GET /materiales/stats/popular
    * Obtener materiales más populares
@@ -137,5 +138,14 @@ export class MaterialesController {
       body,
       request,
     );
+  }
+
+  /**
+   * GET /materiales
+   * Obtener lista de todos los materiales
+   */
+  @Get()
+  async getAllMaterials(@Req() request: Request) {
+    return this.materialesService.getAllMaterials(request);
   }
 }

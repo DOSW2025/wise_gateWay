@@ -72,6 +72,25 @@ export class MaterialesService {
   }
 
   /**
+   * Obtener lista de todos los materiales
+   */
+  async getAllMaterials(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting all materials`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Obtener materiales de un usuario
    */
   async getMaterialsByUser(userId: string, request: Request) {
