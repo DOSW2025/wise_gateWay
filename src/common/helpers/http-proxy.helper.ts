@@ -1,6 +1,15 @@
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, catchError, Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
+
+/**
+ * Tipo para respuesta HTTP de Axios.
+ * Proporciona type safety para el objeto de respuesta.
+ */
+interface AxiosResponseData {
+  data: unknown;
+  headers: Record<string, unknown>;
+  status: number;
+}
 
 export interface ProxyResponse {
   data: unknown;
@@ -38,7 +47,7 @@ export class HttpProxyHelper {
       headers['authorization'] = authHeader;
     }
 
-    let request: Observable<AxiosResponse<unknown>>;
+    let request: Observable<AxiosResponseData>;
 
     switch (method) {
       case 'GET':

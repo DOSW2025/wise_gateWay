@@ -31,10 +31,9 @@ export class UserManagementController {
   constructor(private readonly userManagementService: UserManagementService) {}
 
   @Get()
-  @Roles(Role.ADMIN)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Listar todos los usuarios (Paginado)',
-    description: 'Obtiene una lista paginada de todos los usuarios del sistema. Solo accesible para administradores.'
+    description: 'Obtiene una lista paginada de todos los usuarios del sistema.'
   })
   @ApiQuery({ name: 'page', required: false, description: 'Número de página', example: 1 })
   @ApiQuery({ name: 'limit', required: false, description: 'Cantidad de registros por página', example: 10 })
