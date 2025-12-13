@@ -4,7 +4,6 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { envs } from './config';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function gateway_main() {
   const logger = new Logger('Main');
