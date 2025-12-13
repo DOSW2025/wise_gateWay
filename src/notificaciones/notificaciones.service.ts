@@ -56,6 +56,21 @@ export class NotificacionesService {
     }
   }
 
+  async unreadChatCount(userid: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userNotifyService}/unread-chat-count/${userid}`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting unread chat count`, error);
+      throw error;
+    }
+  }
+
   async notifyDelete(id: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.userNotifyService}/${id}`;

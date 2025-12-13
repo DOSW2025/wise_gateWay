@@ -23,6 +23,13 @@ export class NotificacionesController {
     return this.notificacionesService.notifyUnread(userid, request);
   }
 
+  @Get('unread-chat-count/:userid')
+  unreadChatCount(@Param('userid') userid: string,
+    @Req() request: Request,
+  ) {
+    return this.notificacionesService.unreadChatCount(userid, request);
+  }
+
   @Get(`:userid`)
   usernotify(@Param('userid') userid: string,
     @Req() request: Request,
