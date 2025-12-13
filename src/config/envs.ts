@@ -9,6 +9,8 @@ interface EnvVars {
   USER_MANAGEMENT_PORT: number;
   COMUNIDAD_HOST: string;
   COMUNIDAD_PORT: number;
+  COMUNIDAD_HOST: string;
+  COMUNIDAD_PORT: number;
   JWT_SECRET: string;
   FRONTEND_URL: string;
   AUTH_AZURE?: string;
