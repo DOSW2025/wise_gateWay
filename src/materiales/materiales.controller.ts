@@ -51,6 +51,15 @@ export class MaterialesController {
   }
 
   /**
+   * GET /materiales/stats/count
+   * Obtener contador de materiales
+   */
+  @Get('stats/count')
+  async getMaterialsCount(@Req() request: Request) {
+    return this.materialesService.getMaterialsCount(request);
+  }
+
+  /**
    * POST /materiales/:id/ratings
    * Registrar calificación para un material
    */
@@ -142,10 +151,14 @@ export class MaterialesController {
 
   /**
    * GET /materiales
-   * Obtener lista de todos los materiales
+   * Obtener lista de todos los materiales con paginación
    */
   @Get()
-  async getAllMaterials(@Req() request: Request) {
-    return this.materialesService.getAllMaterials(request);
+  async getAllMaterials(
+    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
+    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getAllMaterials(request, skip, take);
   }
 }
