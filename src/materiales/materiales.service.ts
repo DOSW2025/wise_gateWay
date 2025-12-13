@@ -72,16 +72,16 @@ export class MaterialesService {
   }
 
   /**
-   * Obtener lista de todos los materiales
+   * Obtener lista de todos los materiales con paginación
    */
-  async getAllMaterials(request: Request) {
+  async getAllMaterials(request: Request, skip: number = 0, take: number = 10) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.materialesServiceUrl}`;
 
     try {
-      this.logger.log(`Forwarding GET request to: ${url}`);
+      this.logger.log(`Forwarding GET request to: ${url}?skip=${skip}&take=${take}`);
       const response = await firstValueFrom(
-        this.httpService.get(url, config),
+        this.httpService.get(url, { ...config, params: { skip, take } }),
       );
       return response.data;
     } catch (error) {
@@ -124,6 +124,25 @@ export class MaterialesService {
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting popular materials`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Obtener contador de materiales
+   */
+  async getMaterialsCount(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/stats/count`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting materials count`, error);
       throw error;
     }
   }
@@ -225,7 +244,7 @@ export class MaterialesService {
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.get(url, config),
+        this.httpService.get(url, { ...config, responseType: 'stream' }),
       );
 
       // Propagar headers del microservicio al cliente
