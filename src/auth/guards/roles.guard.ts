@@ -1,7 +1,12 @@
-import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Logger,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators';
-import { Role } from '../../common/dto';
+import { Role, UserRequestDto } from '../../common/dto';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -19,12 +24,15 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest();
+    const request = context
+      .switchToHttp()
+      .getRequest<{ user: UserRequestDto }>();
+    const user = request.user;
     const hasRole = requiredRoles.some((role) => user.rol === role);
 
     if (!hasRole) {
       this.logger.debug(
-        `Access denied: User ${user.sub || user.id || 'unknown'} with role '${user.rol}' attempted to access endpoint requiring roles: [${requiredRoles.join(', ')}]`
+        `Access denied: User ${user.id || 'unknown'} with role '${user.rol}' attempted to access endpoint requiring roles: [${requiredRoles.join(', ')}]`,
       );
     }
 

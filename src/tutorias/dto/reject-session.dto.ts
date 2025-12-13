@@ -15,10 +15,13 @@ export class RejectSessionDto {
 
   @ApiProperty({
     description: 'Razón del rechazo de la tutoría (mínimo 10 caracteres)',
-    example: 'No tengo disponibilidad para ese horario debido a compromisos académicos',
+    example:
+      'No tengo disponibilidad para ese horario debido a compromisos académicos',
     minLength: 10,
   })
   @IsString({ message: 'La razón debe ser una cadena de texto' })
-  @MinLength(10, { message: 'La razón del rechazo debe tener al menos 10 caracteres' })
+  @MinLength(10, {
+    message: 'La razón del rechazo debe tener al menos 10 caracteres',
+  })
   razon: string;
 }

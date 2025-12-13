@@ -40,12 +40,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let error = 'Internal Server Error';
 
     if (this.isAxiosError(exception)) {
-      const axiosError = exception as AxiosErrorLike;
+      const axiosError = exception;
 
       if (axiosError.response) {
         status = axiosError.response.status;
-        const responseData =
-          axiosError.response.data as MicroserviceErrorResponse;
+        const responseData = axiosError.response
+          .data as MicroserviceErrorResponse;
 
         message = responseData.message || responseData.error || message;
         error = responseData.error || error;
@@ -63,27 +63,22 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
         this.logger.error('Microservice not available:', axiosError.message);
       }
-    }
-    else if (exception instanceof HttpException) {
+    } else if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
 
       if (typeof exceptionResponse === 'object') {
         const responseObject = exceptionResponse as Record<string, unknown>;
-        message =
-          (responseObject.message as string | string[]) ||
-          (message as string);
+        message = (responseObject.message as string | string[]) || message;
         error = (responseObject.error as string) || error;
       } else {
-        message = exceptionResponse as string;
+        message = exceptionResponse;
       }
 
       this.logger.warn(
         `HTTP ${status} on ${request.method} ${request.url}: ${JSON.stringify(message)}`,
       );
-    }
-    
-    else if (exception instanceof Error) {
+    } else if (exception instanceof Error) {
       message = exception.message;
       this.logger.error('Unexpected error:', exception.stack);
     }

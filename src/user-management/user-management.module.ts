@@ -10,4 +10,4 @@ import { AuthModule } from '../auth';
   controllers: [UserManagementController, TutorController],
   providers: [UserManagementService],
 })
-export class UserManagementModule { }
+export class UserManagementModule {}

@@ -6,7 +6,6 @@ import { JwtForwardingHelper } from 'src/common/helpers';
 import { firstValueFrom } from 'rxjs';
 import FormData from 'form-data';
 
-
 @Injectable()
 export class MaterialesService {
   private readonly logger = new Logger(MaterialesService.name);
@@ -29,7 +28,11 @@ export class MaterialesService {
   /**
    * Preparar FormData con archivo y campos adicionales
    */
-  private prepareFormDataWithFile(file: Express.Multer.File, body: any, config: any) {
+  private prepareFormDataWithFile(
+    file: Express.Multer.File,
+    body: any,
+    config: any,
+  ) {
     const formData = new FormData();
     formData.append('file', file.buffer, {
       filename: file.originalname,
@@ -53,7 +56,11 @@ export class MaterialesService {
   /**
    * Subir un nuevo material
    */
-  async subirNuevoMaterial(file: Express.Multer.File, body: any, request: Request) {
+  async subirNuevoMaterial(
+    file: Express.Multer.File,
+    body: any,
+    request: Request,
+  ) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.materialesServiceUrl}`;
 
@@ -79,7 +86,9 @@ export class MaterialesService {
     const url = `${this.materialesServiceUrl}`;
 
     try {
-      this.logger.log(`Forwarding GET request to: ${url}?skip=${skip}&take=${take}`);
+      this.logger.log(
+        `Forwarding GET request to: ${url}?skip=${skip}&take=${take}`,
+      );
       const response = await firstValueFrom(
         this.httpService.get(url, { ...config, params: { skip, take } }),
       );
@@ -99,9 +108,7 @@ export class MaterialesService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting materials by user`, error);
@@ -118,9 +125,7 @@ export class MaterialesService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting popular materials`, error);
@@ -137,9 +142,7 @@ export class MaterialesService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting materials count`, error);
@@ -175,9 +178,7 @@ export class MaterialesService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting material ratings`, error);
@@ -190,11 +191,15 @@ export class MaterialesService {
    */
   async searchMaterials(filters: any, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    
+
     // Construir query params
     const queryParams = new URLSearchParams();
     Object.keys(filters).forEach((key) => {
-      if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+      if (
+        filters[key] !== undefined &&
+        filters[key] !== null &&
+        filters[key] !== ''
+      ) {
         queryParams.append(key, filters[key].toString());
       }
     });
@@ -203,9 +208,7 @@ export class MaterialesService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error searching materials`, error);
@@ -220,25 +223,22 @@ export class MaterialesService {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.materialesServiceUrl}/${id}`;
 
-  try {
-    this.logger.log(`Forwarding GET request to: ${url}`);
-    const response = await firstValueFrom(
-      this.httpService.get(url, config),
-    );
-    return response.data;
-  } catch (error) {
-    this.logger.error(`Error getting material detail`, error);
-    throw error;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting material detail`, error);
+      throw error;
+    }
   }
-  }
-
 
   /**
    * Descargar material
    */
   async downloadMaterial(materialId: string, res: Response, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    
+
     const url = `${this.materialesServiceUrl}/${materialId}/download`;
 
     try {
@@ -252,7 +252,10 @@ export class MaterialesService {
         res.setHeader('Content-Type', response.headers['content-type']);
       }
       if (response.headers['content-disposition']) {
-        res.setHeader('Content-Disposition', response.headers['content-disposition']);
+        res.setHeader(
+          'Content-Disposition',
+          response.headers['content-disposition'],
+        );
       }
 
       // Pipear el stream al cliente
@@ -268,11 +271,15 @@ export class MaterialesService {
    */
   async autocompleteMaterials(query: any, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    
+
     // Construir query params
     const queryParams = new URLSearchParams();
     Object.keys(query).forEach((key) => {
-      if (query[key] !== undefined && query[key] !== null && query[key] !== '') {
+      if (
+        query[key] !== undefined &&
+        query[key] !== null &&
+        query[key] !== ''
+      ) {
         queryParams.append(key, query[key].toString());
       }
     });
@@ -281,9 +288,7 @@ export class MaterialesService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error autocompleting materials`, error);

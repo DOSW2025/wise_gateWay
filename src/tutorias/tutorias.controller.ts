@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
+  Query,
+} from '@nestjs/common';
 import type { Request as ExpressRequest } from 'express';
 import { TutoriasService } from './tutorias.service';
 import {
@@ -19,8 +29,8 @@ import {
   CompleteSessionDto,
   CreateRatingDto,
 } from './dto';
-import { JwtAuthGuard, RolesGuard, Roles, Public } from '../auth'; 
-import { Role } from '../common/dto'; 
+import { JwtAuthGuard, RolesGuard, Roles, Public } from '../auth';
+import { Role } from '../common/dto';
 @Controller('tutorias')
 export class TutoriasController {
   constructor(private readonly tutoriasService: TutoriasService) {}
@@ -32,10 +42,12 @@ export class TutoriasController {
     return this.tutoriasService.findTutores(req);
   }
 
-
   @Get('by-materia/:codigo')
   @Roles(Role.ESTUDIANTE, Role.ADMIN, Role.TUTOR)
-  getTutorsByMateria(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
+  getTutorsByMateria(
+    @Param('codigo') codigo: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.getTutorsByMateria(codigo, req);
   }
 
@@ -47,18 +59,21 @@ export class TutoriasController {
 
   @Get('popular-subjects')
   @Public()
-  getPopularSubjects(@Query() query: GetPopularSubjectsDto, @Request() req: ExpressRequest) {
+  getPopularSubjects(
+    @Query() query: GetPopularSubjectsDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.getPopularSubjects(query.limit ?? 10, req);
   }
 
   @Post()
   @Roles(Role.ADMIN)
-  createTutor(@Body() createTutorDto: CreateTutorDto, @Request() req: ExpressRequest) {
+  createTutor(
+    @Body() createTutorDto: CreateTutorDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.create(createTutorDto, req);
   }
-
-
-
 
   @Patch('id/:id/availability')
   @Roles(Role.TUTOR, Role.ESTUDIANTE)
@@ -67,7 +82,11 @@ export class TutoriasController {
     @Body() updateAvailabilityDto: UpdateAvailabilityDto,
     @Request() req: ExpressRequest,
   ) {
-    return this.tutoriasService.updateAvailabilityById(id, updateAvailabilityDto.disponibilidad, req);
+    return this.tutoriasService.updateAvailabilityById(
+      id,
+      updateAvailabilityDto.disponibilidad,
+      req,
+    );
   }
 
   @Patch('email/:email/availability')
@@ -77,7 +96,11 @@ export class TutoriasController {
     @Body() updateAvailabilityDto: UpdateAvailabilityDto,
     @Request() req: ExpressRequest,
   ) {
-    return this.tutoriasService.updateAvailabilityByEmail(email, updateAvailabilityDto.disponibilidad, req);
+    return this.tutoriasService.updateAvailabilityByEmail(
+      email,
+      updateAvailabilityDto.disponibilidad,
+      req,
+    );
   }
 
   @Get('disponibilidad/id/:id')
@@ -88,7 +111,10 @@ export class TutoriasController {
 
   @Get('disponibilidad/email/:email')
   @Public()
-  getAvailabilityByEmail(@Param('email') email: string, @Request() req: ExpressRequest) {
+  getAvailabilityByEmail(
+    @Param('email') email: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.getAvailabilityByEmail(email, req);
   }
 
@@ -112,20 +138,31 @@ export class TutoriasController {
 
   @Post(':id/materias')
   @Roles(Role.ADMIN, Role.TUTOR)
-  addMaterias(@Param('id') id: string, @Body() addMateriasDto: AddMateriasDto, @Request() req: ExpressRequest) {
+  addMaterias(
+    @Param('id') id: string,
+    @Body() addMateriasDto: AddMateriasDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.addMaterias(id, addMateriasDto, req);
   }
 
   @Delete(':id/materias')
   @Roles(Role.ADMIN, Role.TUTOR)
-  removeMaterias(@Param('id') id: string, @Body() removeMateriasDto: RemoveMateriasDto, @Request() req: ExpressRequest) {
+  removeMaterias(
+    @Param('id') id: string,
+    @Body() removeMateriasDto: RemoveMateriasDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.removeMaterias(id, removeMateriasDto, req);
   }
 
   // ==================== SESIONES (Crear y Gestionar) ====================
   @Post('sessions')
   @Roles(Role.ESTUDIANTE, Role.TUTOR)
-  createSession(@Body() createSessionDto: CreateSessionDto, @Request() req: ExpressRequest) {
+  createSession(
+    @Body() createSessionDto: CreateSessionDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.createSession(createSessionDto, req);
   }
 
@@ -137,13 +174,19 @@ export class TutoriasController {
 
   @Get('sessions/student/:studentId')
   @Roles(Role.ESTUDIANTE, Role.ADMIN, Role.TUTOR)
-  findByStudent(@Param('studentId') studentId: string, @Request() req: ExpressRequest) {
+  findByStudent(
+    @Param('studentId') studentId: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.findByStudent(studentId, req);
   }
 
   @Get('sessions/tutor/:tutorId')
   @Roles(Role.ESTUDIANTE, Role.ADMIN, Role.TUTOR)
-  findSessionsByTutor(@Param('tutorId') tutorId: string, @Request() req: ExpressRequest) {
+  findSessionsByTutor(
+    @Param('tutorId') tutorId: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.findByTutor(tutorId, req);
   }
 
@@ -154,7 +197,11 @@ export class TutoriasController {
     @Body() confirmDto: ConfirmSessionDto,
     @Request() req: ExpressRequest,
   ) {
-    return this.tutoriasService.confirmSession(sessionId, confirmDto.tutorId, req);
+    return this.tutoriasService.confirmSession(
+      sessionId,
+      confirmDto.tutorId,
+      req,
+    );
   }
 
   @Patch('sessions/:id/rechazar')
@@ -164,7 +211,12 @@ export class TutoriasController {
     @Body() rejectDto: RejectSessionDto,
     @Request() req: ExpressRequest,
   ) {
-    return this.tutoriasService.rejectSession(sessionId, rejectDto.tutorId, rejectDto, req);
+    return this.tutoriasService.rejectSession(
+      sessionId,
+      rejectDto.tutorId,
+      rejectDto,
+      req,
+    );
   }
 
   @Patch('sessions/:id/cancelar')
@@ -174,7 +226,12 @@ export class TutoriasController {
     @Body() cancelDto: CancelSessionDto,
     @Request() req: ExpressRequest,
   ) {
-    return this.tutoriasService.cancelSession(sessionId, cancelDto.userId, cancelDto, req);
+    return this.tutoriasService.cancelSession(
+      sessionId,
+      cancelDto.userId,
+      cancelDto,
+      req,
+    );
   }
 
   @Patch('sessions/:id/completar')
@@ -184,46 +241,72 @@ export class TutoriasController {
     @Body() completeDto: CompleteSessionDto,
     @Request() req: ExpressRequest,
   ) {
-    return this.tutoriasService.completeSession(sessionId, completeDto.tutorId, completeDto, req);
+    return this.tutoriasService.completeSession(
+      sessionId,
+      completeDto.tutorId,
+      completeDto,
+      req,
+    );
   }
 
   // ==================== CALIFICACIONES (Crear y Consultar) ====================
   @Post('ratings')
   @Roles(Role.ESTUDIANTE)
-  createRating(@Body() createRatingDto: CreateRatingDto, @Request() req: ExpressRequest) {
+  createRating(
+    @Body() createRatingDto: CreateRatingDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.createRating(createRatingDto, req);
   }
 
   @Get('ratings/tutor/:tutorId')
   @Public()
-  findRatingsByTutor(@Param('tutorId') tutorId: string, @Request() req: ExpressRequest) {
+  findRatingsByTutor(
+    @Param('tutorId') tutorId: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.findRatingsByTutor(tutorId, req);
   }
 
   @Get('ratings/session/:sessionId')
   @Public()
-  findRatingsBySession(@Param('sessionId') sessionId: string, @Request() req: ExpressRequest) {
+  findRatingsBySession(
+    @Param('sessionId') sessionId: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.findRatingsBySession(sessionId, req);
   }
 
   @Get('nombre/:id')
   @Public()
-  getFullNameById(@Param() params: FindUserByIdDto, @Request() req: ExpressRequest) {
+  getFullNameById(
+    @Param() params: FindUserByIdDto,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.getFullNameById(params.id, req);
   }
 
   @Get('materia/:codigo')
-  findByCodigo(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
+  findByCodigo(
+    @Param('codigo') codigo: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.findByCodigo(codigo, req);
   }
 
   @Get('upcoming/:userId')
-  findUpcomingSessions(@Param('userId') userId: string, @Request() req: ExpressRequest) {
+  findUpcomingSessions(
+    @Param('userId') userId: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.findUpcomingSessions(userId, req);
   }
 
   @Get('stats/:userId')
-  getUserSessionStats(@Param('userId') userId: string, @Request() req: ExpressRequest) {
+  getUserSessionStats(
+    @Param('userId') userId: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.getUserSessionStats(userId, req);
   }
 
@@ -233,9 +316,10 @@ export class TutoriasController {
   }
 
   @Get(':id/confirmed-sessions')
-  getConfirmedSessions(@Param('id') id: string, @Request() req: ExpressRequest) {
+  getConfirmedSessions(
+    @Param('id') id: string,
+    @Request() req: ExpressRequest,
+  ) {
     return this.tutoriasService.getConfirmedSessions(id, req);
   }
-
 }
-

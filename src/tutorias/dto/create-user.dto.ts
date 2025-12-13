@@ -87,7 +87,8 @@ export class CreateUserDto {
 
   @ApiPropertyOptional({
     description: 'Biografía o descripción del usuario',
-    example: 'Estudiante de ingeniería de sistemas interesado en desarrollo web',
+    example:
+      'Estudiante de ingeniería de sistemas interesado en desarrollo web',
     type: String,
   })
   @IsOptional()
@@ -122,7 +123,8 @@ export class CreateUserDto {
   // ============================================================================
 
   @ApiPropertyOptional({
-    description: 'ID del rol del usuario (FK a tabla roles). 1=estudiante, 2=tutor, 3=profesor',
+    description:
+      'ID del rol del usuario (FK a tabla roles). 1=estudiante, 2=tutor, 3=profesor',
     example: 1,
     default: 1,
     type: Number,
@@ -133,7 +135,8 @@ export class CreateUserDto {
   rolId?: number = 1;
 
   @ApiPropertyOptional({
-    description: 'ID del estado del usuario (FK a tabla estados_usuario). 1=activo, 2=inactivo, 3=suspendido',
+    description:
+      'ID del estado del usuario (FK a tabla estados_usuario). 1=activo, 2=inactivo, 3=suspendido',
     example: 1,
     default: 1,
     type: Number,
@@ -148,7 +151,8 @@ export class CreateUserDto {
   // ============================================================================
 
   @ApiPropertyOptional({
-    description: 'Disponibilidad horaria del usuario. Estructura: { monday: [{start: "08:00", end: "10:00", modalidad: "VIRTUAL"}], tuesday: [], ... }',
+    description:
+      'Disponibilidad horaria del usuario. Estructura: { monday: [{start: "08:00", end: "10:00", modalidad: "VIRTUAL"}], tuesday: [], ... }',
     example: {
       monday: [{ start: '08:00', end: '10:00', modalidad: 'VIRTUAL' }],
       tuesday: [{ start: '14:00', end: '16:00', modalidad: 'PRESENCIAL' }],

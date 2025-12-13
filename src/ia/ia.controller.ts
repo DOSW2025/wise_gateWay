@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, ValidationPipe, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  ValidationPipe,
+  Logger,
+} from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
 import { IaService } from './ia.service';
 import { ChatDto } from './dto/chat.dto';
@@ -10,7 +17,7 @@ export class IaController {
   private readonly logger = new Logger(IaController.name);
 
   constructor(private readonly iaService: IaService) {
-     this.logger.log('IaController initialized');
+    this.logger.log('IaController initialized');
   }
 
   @SkipThrottle()
@@ -31,12 +38,16 @@ export class IaController {
   }
 
   @Post('chat/recommendations')
-  async getRecommendations(@Body(new ValidationPipe()) body: RecommendationsRequestDto) {
+  async getRecommendations(
+    @Body(new ValidationPipe()) body: RecommendationsRequestDto,
+  ) {
     return this.iaService.getRecommendations(body);
   }
 
   @Post('chat/nav')
-  async chatNavigation(@Body(new ValidationPipe()) chatNavigationDto: ChatNavigationDto) {
+  async chatNavigation(
+    @Body(new ValidationPipe()) chatNavigationDto: ChatNavigationDto,
+  ) {
     const { message } = chatNavigationDto;
     const reply = await this.iaService.chatNavigation(message);
     return {

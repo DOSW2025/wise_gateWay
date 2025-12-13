@@ -10,5 +10,5 @@ export interface MicroserviceErrorResponse {
   statusCode?: number;
   message?: string | string[];
   error?: string;
-  [key: string]: unknown; 
+  [key: string]: unknown;
 }

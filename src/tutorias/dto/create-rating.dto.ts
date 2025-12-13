@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { 
-  IsNotEmpty, 
+import {
+  IsNotEmpty,
   IsUUID,
   IsInt,
   Min,
   Max,
   IsString,
   IsOptional,
-  MaxLength
+  MaxLength,
 } from 'class-validator';
 
 /**
@@ -49,7 +49,8 @@ export class CreateRatingDto {
 
   @ApiProperty({
     description: 'Comentario opcional del estudiante sobre la tutoría',
-    example: 'Excelente tutor, explicó muy bien los conceptos y resolvió todas mis dudas',
+    example:
+      'Excelente tutor, explicó muy bien los conceptos y resolvió todas mis dudas',
     type: String,
     required: false,
     maxLength: 500,

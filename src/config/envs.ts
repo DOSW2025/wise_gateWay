@@ -70,7 +70,10 @@ export const envs = {
   comunidadHost: envVars.COMUNIDAD_HOST,
   comunidadPort: envVars.COMUNIDAD_PORT,
   jwtSecret: envVars.JWT_SECRET,
-  frontendUrl: (envVars.FRONTEND_URL.startsWith('http') ? envVars.FRONTEND_URL : `https://${envVars.FRONTEND_URL}`).replace(/\/$/, ''),
+  frontendUrl: (envVars.FRONTEND_URL.startsWith('http')
+    ? envVars.FRONTEND_URL
+    : `https://${envVars.FRONTEND_URL}`
+  ).replace(/\/$/, ''),
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
