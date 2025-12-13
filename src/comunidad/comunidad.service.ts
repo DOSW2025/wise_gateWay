@@ -499,6 +499,123 @@ export class ComunidadService {
     }
 
     /**
+     * Proxy para crear un reporte
+     */
+    async createReport(body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/reportes`;
+
+        try {
+            this.logger.log(`Forwarding POST request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.post(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener todos los reportes (solo Admin)
+     */
+    async getAllReports(query: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/reportes`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, {
+                    ...config,
+                    params: query,
+                }),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener mis reportes
+     */
+    async getMyReports(request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/reportes/mis-reportes`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener estadísticas de reportes (solo Admin)
+     */
+    async getReportStatistics(request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/reportes/estadisticas`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para obtener un reporte por ID (solo Admin)
+     */
+    async getReportById(reportId: string, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/reportes/${reportId}`;
+
+        try {
+            this.logger.log(`Forwarding GET request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.get(url, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Proxy para actualizar el estado de un reporte (solo Admin)
+     */
+    async updateReportStatus(reportId: string, body: any, request: Request) {
+        const config = JwtForwardingHelper.getAxiosConfig(request);
+        const url = `${this.comunidadServiceUrl}/reportes/${reportId}/estado`;
+
+        try {
+            this.logger.log(`Forwarding PATCH request to: ${url}`);
+            const response = await firstValueFrom(
+                this.httpService.patch(url, body, config),
+            );
+            return response.data;
+        } catch (error) {
+            this.logger.error(`Error forwarding request to comunidad service`, error);
+            throw error;
+        }
+    }
+
+    /**
      * Proxy genérico para cualquier ruta de comunidad
      */
     async forwardRequest(
