@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { 
-  IsNotEmpty, 
-  IsString, 
-  IsEnum, 
-  IsDateString, 
+import {
+  IsNotEmpty,
+  IsString,
+  IsEnum,
+  IsDateString,
   IsUUID,
   IsOptional,
   MaxLength,
   Matches,
-  IsIn
+  IsIn,
 } from 'class-validator';
 export enum Modalidad {
   VIRTUAL = 'VIRTUAL',
@@ -54,18 +54,41 @@ export class CreateSessionDto {
     type: String,
     format: 'date-time',
   })
-  @IsDateString({}, { message: 'La fecha debe estar en formato ISO 8601 válido' })
+  @IsDateString(
+    {},
+    { message: 'La fecha debe estar en formato ISO 8601 válido' },
+  )
   @IsNotEmpty({ message: 'La fecha programada es obligatoria' })
   scheduledAt: string;
 
   @ApiProperty({
     description: 'Día de la semana en inglés',
     example: 'monday',
-    enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+    enum: [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ],
   })
-  @IsIn(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], {
-    message: 'El día debe ser uno de: monday, tuesday, wednesday, thursday, friday, saturday, sunday'
-  })
+  @IsIn(
+    [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ],
+    {
+      message:
+        'El día debe ser uno de: monday, tuesday, wednesday, thursday, friday, saturday, sunday',
+    },
+  )
   @IsNotEmpty({ message: 'El día es obligatorio' })
   day: string;
 
@@ -74,8 +97,8 @@ export class CreateSessionDto {
     example: '14:00',
     type: String,
   })
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { 
-    message: 'La hora de inicio debe estar en formato HH:mm (ej: 14:00)' 
+  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message: 'La hora de inicio debe estar en formato HH:mm (ej: 14:00)',
   })
   @IsNotEmpty({ message: 'La hora de inicio es obligatoria' })
   startTime: string;
@@ -85,8 +108,8 @@ export class CreateSessionDto {
     example: '16:00',
     type: String,
   })
-  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, { 
-    message: 'La hora de fin debe estar en formato HH:mm (ej: 16:00)' 
+  @Matches(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message: 'La hora de fin debe estar en formato HH:mm (ej: 16:00)',
   })
   @IsNotEmpty({ message: 'La hora de fin es obligatoria' })
   endTime: string;
@@ -97,8 +120,9 @@ export class CreateSessionDto {
     example: Modalidad.VIRTUAL,
     enumName: 'Modalidad',
   })
-  @IsEnum(Modalidad, { 
-    message: 'La modalidad debe ser uno de los valores permitidos: VIRTUAL o PRESENCIAL' 
+  @IsEnum(Modalidad, {
+    message:
+      'La modalidad debe ser uno de los valores permitidos: VIRTUAL o PRESENCIAL',
   })
   @IsNotEmpty({ message: 'La modalidad es obligatoria' })
   mode: Modalidad;
@@ -111,7 +135,9 @@ export class CreateSessionDto {
     maxLength: 500,
   })
   @IsString({ message: 'Los comentarios deben ser una cadena de texto' })
-  @MaxLength(500, { message: 'Los comentarios no pueden exceder 500 caracteres' })
+  @MaxLength(500, {
+    message: 'Los comentarios no pueden exceder 500 caracteres',
+  })
   @IsOptional()
   comentarios?: string;
 }

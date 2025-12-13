@@ -6,7 +6,7 @@ export class UpdatePersonalInfoDto {
     description: 'Número de teléfono del usuario',
     example: '3001234567',
     required: false,
-    maxLength: 20
+    maxLength: 20,
   })
   @IsOptional()
   @IsString()
@@ -15,9 +15,10 @@ export class UpdatePersonalInfoDto {
 
   @ApiProperty({
     description: 'Biografía o descripción personal del usuario',
-    example: 'Estudiante de ingeniería de sistemas interesado en desarrollo web',
+    example:
+      'Estudiante de ingeniería de sistemas interesado en desarrollo web',
     required: false,
-    maxLength: 500
+    maxLength: 500,
   })
   @IsOptional()
   @IsString()

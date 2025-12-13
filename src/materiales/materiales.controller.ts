@@ -1,4 +1,20 @@
-import {Controller,Param,Req,Get,Post,Put,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,Logger,} from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Req,
+  Get,
+  Post,
+  Put,
+  Body,
+  Query,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Res,
+  ParseIntPipe,
+  DefaultValuePipe,
+  Logger,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaterialesService } from './materiales.service';
 import type { Request, Response, Express } from 'express';
@@ -36,7 +52,6 @@ export class MaterialesController {
   ) {
     return this.materialesService.getMaterialsByUser(userId, request);
   }
-
 
   /**
    * GET /materiales/stats/popular
@@ -111,14 +126,9 @@ export class MaterialesController {
    * Obtener información detallada de un material específico
    */
   @Get(':id')
-  async getMaterialDetail(
-    @Param('id') id: string,
-    @Req() request: Request,
-  ) {
+  async getMaterialDetail(@Param('id') id: string, @Req() request: Request) {
     return this.materialesService.getMaterialDetail(id, request);
   }
-
-  
 
   /**
    * GET /materiales/autocomplete
