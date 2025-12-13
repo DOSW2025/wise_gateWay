@@ -36,9 +36,11 @@ export class MaterialesService {
       contentType: file.mimetype,
     });
 
-    // Agregar los campos del body
+    // Agregar solo los campos del body que no sean vacíos/nulos
     Object.keys(body).forEach((key) => {
-      formData.append(key, body[key]);
+      if (body[key] !== undefined && body[key] !== null && body[key] !== '') {
+        formData.append(key, body[key]);
+      }
     });
 
     // Agregar headers del FormData a la configuración
@@ -186,6 +188,25 @@ export class MaterialesService {
   }
 
   /**
+   * Obtener lista de calificaciones de un material
+   */
+  async getMaterialRatingsList(materialId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/${materialId}/ratings/list`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting material ratings list`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Buscar materiales con filtros
    */
   async searchMaterials(filters: any, request: Request) {
@@ -296,7 +317,7 @@ export class MaterialesService {
    */
   async actualizarMaterialVersion(
     materialId: string,
-    file: Express.Multer.File,
+    file: Express.Multer.File | undefined,
     body: any,
     request: Request,
   ) {
@@ -304,15 +325,39 @@ export class MaterialesService {
     const url = `${this.materialesServiceUrl}/${materialId}`;
 
     try {
-      const formData = this.prepareFormDataWithFile(file, body, config);
+      let dataToSend: any = body;
+
+      // Si hay archivo, preparar FormData
+      if (file) {
+        dataToSend = this.prepareFormDataWithFile(file, body, config);
+      }
 
       this.logger.log(`Forwarding PUT request to: ${url}`);
       const response = await firstValueFrom(
-        this.httpService.put(url, formData, config),
+        this.httpService.put(url, dataToSend, config),
       );
       return response.data;
     } catch (error) {
       this.logger.error(`Error updating material version`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Eliminar un material
+   */
+  async deleteMaterial(materialId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/${materialId}`;
+
+    try {
+      this.logger.log(`Forwarding DELETE request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.delete(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error deleting material`, error);
       throw error;
     }
   }

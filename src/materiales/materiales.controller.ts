@@ -1,4 +1,4 @@
-import {Controller,Param,Req,Get,Post,Put,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,Logger,} from '@nestjs/common';
+import {Controller,Param,Req,Get,Post,Put,Delete,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,Logger,} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaterialesService } from './materiales.service';
 import type { Request, Response, Express } from 'express';
@@ -85,6 +85,18 @@ export class MaterialesController {
   }
 
   /**
+   * GET /materiales/:id/ratings/list
+   * Obtener lista de calificaciones de un material
+   */
+  @Get(':id/ratings/list')
+  async getMaterialRatingsList(
+    @Param('id') materialId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getMaterialRatingsList(materialId, request);
+  }
+
+  /**
    * GET /materiales/:id/download
    * Descargar un material específico
    */
@@ -130,6 +142,18 @@ export class MaterialesController {
   }
 
   /**
+   * DELETE /materiales/:id
+   * Eliminar un material específico
+   */
+  @Delete(':id')
+  async deleteMaterial(
+    @Param('id') materialId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.deleteMaterial(materialId, request);
+  }
+
+  /**
    * PUT /materiales/:id
    * Actualizar versión de un material existente
    */
@@ -137,9 +161,9 @@ export class MaterialesController {
   @UseInterceptors(FileInterceptor('file'))
   async actualizarMaterialVersion(
     @Param('id') materialId: string,
-    @UploadedFile() file: Express.Multer.File,
-    @Body() body: any,
     @Req() request: Request,
+    @UploadedFile() file?: Express.Multer.File,
+    @Body() body: any = {},
   ) {
     return this.materialesService.actualizarMaterialVersion(
       materialId,
