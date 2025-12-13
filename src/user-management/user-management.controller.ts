@@ -28,7 +28,7 @@ import { Role } from '../common/dto';
 @Controller('gestion-usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UserManagementController {
-  constructor(private readonly userManagementService: UserManagementService) {}
+  constructor(private readonly userManagementService: UserManagementService) { }
 
   @Get()
   @ApiOperation({
@@ -128,6 +128,17 @@ export class UserManagementController {
     @Req() request: Request,
   ) {
     return this.userManagementService.changeStatus(id, changeStatusDto, request);
+  }
+
+  @Get('me')
+  @ApiOperation({
+    summary: 'Obtener mi perfil',
+    description: 'Devuelve la información del usuario autenticado (teléfono, biografía, rol y estado).'
+  })
+  @ApiResponse({ status: 200, description: 'Perfil obtenido exitosamente' })
+  @ApiResponse({ status: 401, description: 'No autorizado - Token JWT inválido o ausente' })
+  getMyProfile(@Req() request: Request) {
+    return this.userManagementService.getMyProfile(request);
   }
 
   @Patch('me/info-personal')
