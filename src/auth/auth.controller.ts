@@ -3,8 +3,9 @@ import type { Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { envs } from '../config/envs';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
@@ -14,7 +15,7 @@ export class AuthController {
   @Get('google')
   @ApiOperation({ 
     summary: 'Iniciar autenticación con Google',
-    description: 'Redirige al usuario al flujo de autenticación de Google OAuth2'
+    description: 'Redirige al usuario al flujo de autenticación OAuth de Google. Este endpoint inicia el proceso de login con Google.'
   })
   @ApiResponse({ 
     status: 307, 
@@ -22,7 +23,13 @@ export class AuthController {
   })
   @ApiResponse({ 
     status: 500, 
-    description: 'Error interno del servidor al iniciar autenticación' 
+    description: 'Error al iniciar el proceso de autenticación',
+    schema: {
+      example: {
+        statusCode: 500,
+        message: 'Error al iniciar el proceso de autenticación'
+      }
+    }
   })
   async googleAuth(@Res() res: Response): Promise<void> {
     try {
@@ -41,14 +48,29 @@ export class AuthController {
   @Get('callback')
   @ApiOperation({ 
     summary: 'Callback de autenticación de Google',
-    description: 'Recibe la respuesta del servicio de autenticación y redirige al frontend con el token'
+    description: 'Endpoint que recibe la respuesta de Google después de la autenticación. Redirige al frontend con el token JWT y la información del usuario o un mensaje de error.'
   })
-  @ApiQuery({ name: 'token', required: false, description: 'JWT token de autenticación' })
-  @ApiQuery({ name: 'user', required: false, description: 'Información del usuario en formato JSON' })
-  @ApiQuery({ name: 'error', required: false, description: 'Mensaje de error si la autenticación falló' })
+  @ApiQuery({ 
+    name: 'token', 
+    required: false, 
+    description: 'Token JWT generado después de una autenticación exitosa',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+  })
+  @ApiQuery({ 
+    name: 'user', 
+    required: false, 
+    description: 'Información del usuario codificada en Base64 o JSON string',
+    example: 'eyJpZCI6IjEyMyIsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSJ9'
+  })
+  @ApiQuery({ 
+    name: 'error', 
+    required: false, 
+    description: 'Mensaje de error si la autenticación falló',
+    example: 'authentication_failed'
+  })
   @ApiResponse({ 
     status: 307, 
-    description: 'Redirección al frontend con el token o error' 
+    description: 'Redirección al frontend con los parámetros de resultado (éxito o error)' 
   })
   async googleAuthCallback(
     @Query('token') token: string,
@@ -57,12 +79,22 @@ export class AuthController {
     @Res() res: Response
   ): Promise<void> {
     if (error) {
-      const errorUrl = `${envs.frontendUrl}/login?error=${encodeURIComponent(error)}`;
-      res.redirect(HttpStatus.TEMPORARY_REDIRECT, errorUrl);
+      const url = new URL(envs.frontendUrl);
+      const basePath = url.pathname.replace(/\/$/, '');
+      url.pathname = `${basePath}/login`;
+      url.searchParams.append('error', error);
+
+      res.redirect(HttpStatus.TEMPORARY_REDIRECT, url.toString());
       return;
     }
 
-    const redirectUrl = `${envs.frontendUrl}/auth/callback?token=${encodeURIComponent(token)}&user=${encodeURIComponent(user)}`;
+    const url = new URL(envs.frontendUrl);
+    const basePath = url.pathname.replace(/\/$/, '');
+    url.pathname = `${basePath}/auth/callback`;
+    url.searchParams.append('token', token);
+    url.searchParams.append('user', user);
+
+    const redirectUrl = url.toString();
     this.logger.log(`Redirecting to frontend: ${redirectUrl}`);
     res.redirect(HttpStatus.TEMPORARY_REDIRECT, redirectUrl);
   }

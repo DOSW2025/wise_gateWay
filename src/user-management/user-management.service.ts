@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { envs } from '../config';
 import type { Request } from 'express';
 import { JwtForwardingHelper } from '../common/helpers';
-import { PaginationDto, FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto } from './dto';
+import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
 
 @Injectable()
 export class UserManagementService {
@@ -20,26 +20,7 @@ export class UserManagementService {
       url = `https://${url}`;
     }
 
-    this.userManagementServiceUrl = url;
-  }
-
-  async findAllPaginated(paginationDto: PaginationDto, request: Request) {
-    const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userManagementServiceUrl}/gestion-usuarios`;
-
-    try {
-      this.logger.log(`Forwarding request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, {
-          ...config,
-          params: paginationDto,
-        }),
-      );
-      return response.data;
-    } catch (error) {
-      this.logger.error(`Error forwarding request to user management service`, error);
-      throw error;
-    }
+    this.userManagementServiceUrl = url.replace(/\/$/, '');
   }
 
   async findAllWithFilters(filterUsersDto: FilterUsersDto, request: Request) {
@@ -137,6 +118,53 @@ export class UserManagementService {
       return response.data;
     } catch (error) {
       this.logger.error(`Error deleting own account`, error);
+      throw error;
+    }
+  }
+  async getUserStatistics(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/usuarios`;
+    try {
+      this.logger.log(`Forwarding DELETE request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error calculating stats`, error);
+      throw error;
+    }
+  }
+
+  async getRoleStatistics(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/roles`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error calculating role statistics`, error);
+      throw error;
+    }
+  }
+
+  async getUserGrowth(userGrowthDto: UserGrowthDto, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/crecimiento`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          ...config,
+          params: userGrowthDto,
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting user growth statistics`, error);
       throw error;
     }
   }
