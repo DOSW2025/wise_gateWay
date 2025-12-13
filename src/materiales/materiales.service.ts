@@ -112,6 +112,63 @@ export class MaterialesService {
   }
 
   /**
+   * Obtener estadísticas de materiales de un usuario
+   */
+  async getMaterialsStatsByUser(userId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/user/${userId}/stats`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting materials stats by user`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Obtener materiales más descargados de un usuario
+   */
+  async getTopDownloadedMaterialsByUser(userId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/user/${userId}/top-downloaded`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting top downloaded materials by user`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Obtener materiales más vistos de un usuario
+   */
+  async getTopViewedMaterialsByUser(userId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/user/${userId}/top-viewed`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting top viewed materials by user`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Obtener materiales populares
    */
   async getPopularMaterials(limit: number, request: Request) {

@@ -37,6 +37,42 @@ export class MaterialesController {
     return this.materialesService.getMaterialsByUser(userId, request);
   }
 
+  /**
+   * GET /materiales/user/:userId/stats
+   * Obtener estadísticas de materiales de un usuario
+   */
+  @Get('user/:userId/stats')
+  async getMaterialsStatsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getMaterialsStatsByUser(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/top-downloaded
+   * Obtener materiales más descargados de un usuario
+   */
+  @Get('user/:userId/top-downloaded')
+  async getTopDownloadedMaterialsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTopDownloadedMaterialsByUser(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/top-viewed
+   * Obtener materiales más vistos de un usuario
+   */
+  @Get('user/:userId/top-viewed')
+  async getTopViewedMaterialsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTopViewedMaterialsByUser(userId, request);
+  }
+
 
   /**
    * GET /materiales/stats/popular
