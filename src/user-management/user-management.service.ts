@@ -93,18 +93,17 @@ export class UserManagementService {
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(this.httpService.get(url, config));
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
       return response.data;
     } catch (error) {
-      this.logger.error(`Error fetching authenticated user profile`, error);
+      this.logger.error(`Error getting user profile`, error);
       throw error;
     }
   }
 
-  async updateMyPersonalInfo(
-    updatePersonalInfoDto: UpdatePersonalInfoDto,
-    request: Request,
-  ) {
+  async updateMyPersonalInfo(updatePersonalInfoDto: UpdatePersonalInfoDto, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/me/info-personal`;
 

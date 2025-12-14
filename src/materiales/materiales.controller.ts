@@ -1,20 +1,4 @@
-import {
-  Controller,
-  Param,
-  Req,
-  Get,
-  Post,
-  Put,
-  Body,
-  Query,
-  UseGuards,
-  UseInterceptors,
-  UploadedFile,
-  Res,
-  ParseIntPipe,
-  DefaultValuePipe,
-  Logger,
-} from '@nestjs/common';
+import {Controller,Param,Req,Get,Post,Put,Delete,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,Logger,} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaterialesService } from './materiales.service';
 import type { Request, Response, Express } from 'express';
@@ -51,6 +35,69 @@ export class MaterialesController {
     @Req() request: Request,
   ) {
     return this.materialesService.getMaterialsByUser(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/stats
+   * Obtener estadísticas de materiales de un usuario
+   */
+  @Get('user/:userId/stats')
+  async getMaterialsStatsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getMaterialsStatsByUser(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/top-downloaded
+   * Obtener materiales más descargados de un usuario
+   */
+  @Get('user/:userId/top-downloaded')
+  async getTopDownloadedMaterialsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTopDownloadedMaterialsByUser(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/top-viewed
+   * Obtener materiales más vistos de un usuario
+   */
+  @Get('user/:userId/top-viewed')
+  async getTopViewedMaterialsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTopViewedMaterialsByUser(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/tags-percentage
+   * Obtener porcentaje de tags de materiales de un usuario
+   */
+  @Get('user/:userId/tags-percentage')
+  async getTagsPercentageByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTagsPercentageByUser(userId, request);
+  }
+
+
+  /**
+   * GET /materiales/search
+   * Buscar materiales por nombre con paginación
+   */
+  @Get('search')
+  async searchMaterialsByName(
+    @Query('nombre') nombre: string,
+    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
+    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.searchMaterialsByName(nombre, skip, take, request);
   }
 
   /**
@@ -100,6 +147,18 @@ export class MaterialesController {
   }
 
   /**
+   * GET /materiales/:id/ratings/list
+   * Obtener lista de calificaciones de un material
+   */
+  @Get(':id/ratings/list')
+  async getMaterialRatingsList(
+    @Param('id') materialId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getMaterialRatingsList(materialId, request);
+  }
+
+  /**
    * GET /materiales/:id/download
    * Descargar un material específico
    */
@@ -126,17 +185,23 @@ export class MaterialesController {
    * Obtener información detallada de un material específico
    */
   @Get(':id')
-  async getMaterialDetail(@Param('id') id: string, @Req() request: Request) {
+  async getMaterialDetail(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ) {
     return this.materialesService.getMaterialDetail(id, request);
   }
 
   /**
-   * GET /materiales/autocomplete
-   * Autocompletado de búsqueda de materiales
+   * DELETE /materiales/:id
+   * Eliminar un material específico
    */
-  @Get('autocomplete')
-  async autocompleteMateriales(@Query() query: any, @Req() request: Request) {
-    return this.materialesService.autocompleteMaterials(query, request);
+  @Delete(':id')
+  async deleteMaterial(
+    @Param('id') materialId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.deleteMaterial(materialId, request);
   }
 
   /**
@@ -147,9 +212,9 @@ export class MaterialesController {
   @UseInterceptors(FileInterceptor('file'))
   async actualizarMaterialVersion(
     @Param('id') materialId: string,
-    @UploadedFile() file: Express.Multer.File,
-    @Body() body: any,
     @Req() request: Request,
+    @UploadedFile() file?: Express.Multer.File,
+    @Body() body: any = {},
   ) {
     return this.materialesService.actualizarMaterialVersion(
       materialId,
