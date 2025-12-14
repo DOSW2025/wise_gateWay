@@ -4,9 +4,10 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ChangeStatusDto {
   @ApiProperty({
-    description: 'ID del nuevo estado a asignar al usuario (1: activo, 2: inactivo, 3: suspendido)',
+    description:
+      'ID del nuevo estado a asignar al usuario (1: activo, 2: inactivo, 3: suspendido)',
     example: 1,
-    type: Number
+    type: Number,
   })
   @IsInt()
   @IsPositive()

@@ -13,7 +13,8 @@ export class PdfExportService {
   constructor(private readonly httpService: HttpService) {
     let url = envs.materialesAzure;
 
-    if (!url) throw new Error('MATERIALES_AZURE environment variable is required');
+    if (!url)
+      throw new Error('MATERIALES_AZURE environment variable is required');
     if (!url.startsWith('http')) url = `https://${url}`;
 
     this.materialesServiceUrl = url + '/pdf-export';
@@ -26,15 +27,15 @@ export class PdfExportService {
   async exportMaterialStats(id: string, request: Request, res: Response) {
     const baseConfig = JwtForwardingHelper.getAxiosConfig(request);
     const config = {
-        ...baseConfig,
-        responseType: 'stream' as const,
+      ...baseConfig,
+      responseType: 'stream' as const,
     };
-        
+
     const url = `${this.materialesServiceUrl}/${id}/stats/export`;
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      
+
       // Usar axios directamente para obtener el stream
       const response = await axios.get(url, config);
 
@@ -43,7 +44,10 @@ export class PdfExportService {
         res.setHeader('Content-Type', response.headers['content-type']);
       }
       if (response.headers['content-disposition']) {
-        res.setHeader('Content-Disposition', response.headers['content-disposition']);
+        res.setHeader(
+          'Content-Disposition',
+          response.headers['content-disposition'],
+        );
       }
 
       // Pipear el stream al cliente

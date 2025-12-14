@@ -4,7 +4,13 @@ import { firstValueFrom } from 'rxjs';
 import { envs } from '../config';
 import type { Request } from 'express';
 import { JwtForwardingHelper } from '../common/helpers';
-import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
+import {
+  FilterUsersDto,
+  ChangeRoleDto,
+  ChangeStatusDto,
+  UpdatePersonalInfoDto,
+  UserGrowthDto,
+} from './dto';
 
 @Injectable()
 export class UserManagementService {
@@ -37,7 +43,10 @@ export class UserManagementService {
       );
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding filtered request to user management service`, error);
+      this.logger.error(
+        `Error forwarding filtered request to user management service`,
+        error,
+      );
       throw error;
     }
   }
@@ -58,7 +67,11 @@ export class UserManagementService {
     }
   }
 
-  async changeStatus(id: string, changeStatusDto: ChangeStatusDto, request: Request) {
+  async changeStatus(
+    id: string,
+    changeStatusDto: ChangeStatusDto,
+    request: Request,
+  ) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/${id}/estado`;
 
@@ -74,7 +87,24 @@ export class UserManagementService {
     }
   }
 
-  async updateMyPersonalInfo(updatePersonalInfoDto: UpdatePersonalInfoDto, request: Request) {
+  async getMyProfile(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/me`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error fetching authenticated user profile`, error);
+      throw error;
+    }
+  }
+
+  async updateMyPersonalInfo(
+    updatePersonalInfoDto: UpdatePersonalInfoDto,
+    request: Request,
+  ) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/me/info-personal`;
 
@@ -126,9 +156,7 @@ export class UserManagementService {
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/usuarios`;
     try {
       this.logger.log(`Forwarding DELETE request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error calculating stats`, error);
@@ -141,9 +169,7 @@ export class UserManagementService {
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/roles`;
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error calculating role statistics`, error);

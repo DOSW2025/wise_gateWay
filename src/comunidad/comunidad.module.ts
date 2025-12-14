@@ -4,8 +4,8 @@ import { ComunidadService } from './comunidad.service';
 import { ComunidadController } from './comunidad.controller';
 
 @Module({
-    imports: [HttpModule],
-    controllers: [ComunidadController],
-    providers: [ComunidadService],
+  imports: [HttpModule],
+  controllers: [ComunidadController],
+  providers: [ComunidadService],
 })
-export class ComunidadModule { }
+export class ComunidadModule {}
