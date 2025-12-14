@@ -12,10 +12,10 @@ export async function getFirebaseApp(): Promise<admin.app.App | null> {
     const clientEmail = envs.firebaseClientEmail;
     const privateKeyRaw = envs.firebasePrivateKey;
 
-    logger.log(`Firebase initialization - ProjectID: ${projectId || 'MISSING'}, Email: ${clientEmail ? 'SET' : 'MISSING'}, PrivateKey: ${privateKeyRaw ? 'SET (' + privateKeyRaw.substring(0, 30) + '...)' : 'MISSING'}`);
+    logger.log(`🔧 Firebase initialization - ProjectID: ${projectId || '❌ MISSING'}, Email: ${clientEmail ? '✅ SET' : '❌ MISSING'}, PrivateKey: ${privateKeyRaw ? '✅ SET (' + privateKeyRaw.substring(0, 30) + '...)' : '❌ MISSING'}`);
 
     if (!projectId || !clientEmail || !privateKeyRaw) {
-      logger.warn('Firebase not fully configured - feature flags will use default values');
+      logger.warn('⚠️ Firebase not fully configured - feature flags will use default values');
       return null; // Firebase not configured; flags will default to safe values
     }
 
@@ -24,7 +24,7 @@ export async function getFirebaseApp(): Promise<admin.app.App | null> {
     // If an app is already initialized (e.g., hot reload), reuse it
     const existingApps = admin.apps;
     if (existingApps && existingApps.length > 0) {
-      logger.log('Reusing existing Firebase app instance');
+      logger.log('♻️ Reusing existing Firebase app instance');
       return existingApps[0];
     }
 
@@ -40,8 +40,12 @@ export async function getFirebaseApp(): Promise<admin.app.App | null> {
       logger.log('✅ Firebase Admin initialized successfully');
       return app;
     } catch (error) {
-      logger.error(`❌ Firebase initialization failed: ${error instanceof Error ? error.message : error}`);
-      throw error;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`❌ Firebase initialization failed: ${errorMessage}`);
+      if (error instanceof Error && error.stack) {
+        logger.error(`🔍 Stack trace: ${error.stack.split('\n').slice(0, 3).join(' | ')}`);
+      }
+      return null; // Return null instead of throwing to allow app to start with default values
     }
   })();
   return appPromise;
