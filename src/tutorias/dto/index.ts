@@ -3,7 +3,7 @@ export * from './update-tutoria.dto';
 export * from './add-materias.dto';
 export * from './cancel-session.dto';
 export * from './complete-session.dto';
-export * from './confirm-session.dto'
+export * from './confirm-session.dto';
 export * from './create-rating.dto';
 export * from './create-session.dto';
 export * from './create-stat.dto';

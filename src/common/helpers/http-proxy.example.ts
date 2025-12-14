@@ -4,7 +4,14 @@
  * Este archivo muestra cómo usar el helper en diferentes casos
  */
 
-import { Controller, Get, Post, Body, Headers, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Headers,
+  UseInterceptors,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ProxyResponseInterceptor } from '../interceptors/proxy-response.interceptor';
 import { HttpProxyHelper } from './http-proxy.helper';

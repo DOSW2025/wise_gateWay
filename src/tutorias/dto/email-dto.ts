@@ -1,49 +1,48 @@
-import { IsBoolean, IsEmail, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsString } from 'class-validator';
 
 export enum TemplateNotificacionesEnum {
-    SOLICITUD_ESTUDIANTE = "SolicitudTutoriaEstudiante",
-    SOLICITUD_TUTOR = "SolicitudTutoriaTutor",
-    CONFIRMACION_ESTUDIANTE = "ConfirmacionTutoriaEstudiante",
-    CONFIRMACION_TUTOR = "ConfirmacionTutoriaTutor",
-    RECHAZO_ESTUDIANTE = "RechazoTutoriaEstudiante",
-    RECHAZO_TUTOR = "RechazoTutoriaTutor",
-    CANCELACION_ESTUDIANTE = "CancelacionTutoriaEstudiante",
-    CANCELACION_TUTOR = "CancelacionTutoriaTutor",
-    COMPLETACION_ESTUDIANTE = "CompletacionTutoriaEstudiante",
-    COMPLETACION_TUTOR = "CompletacionTutoriaTutor"
+  SOLICITUD_ESTUDIANTE = 'SolicitudTutoriaEstudiante',
+  SOLICITUD_TUTOR = 'SolicitudTutoriaTutor',
+  CONFIRMACION_ESTUDIANTE = 'ConfirmacionTutoriaEstudiante',
+  CONFIRMACION_TUTOR = 'ConfirmacionTutoriaTutor',
+  RECHAZO_ESTUDIANTE = 'RechazoTutoriaEstudiante',
+  RECHAZO_TUTOR = 'RechazoTutoriaTutor',
+  CANCELACION_ESTUDIANTE = 'CancelacionTutoriaEstudiante',
+  CANCELACION_TUTOR = 'CancelacionTutoriaTutor',
+  COMPLETACION_ESTUDIANTE = 'CompletacionTutoriaEstudiante',
+  COMPLETACION_TUTOR = 'CompletacionTutoriaTutor',
 }
 export class EmailDto {
-    @IsEmail()
-    email: string;
+  @IsEmail()
+  email: string;
 
-    @IsString()
-    name!: string;
+  @IsString()
+  name!: string;
 
-    @IsString()
-    resumen!: string;
-    
-    @IsBoolean()
-    guardar!: boolean;
+  @IsString()
+  resumen!: string;
 
-    @IsString()
-    template!: string;
-    
-    @IsString()
-    materia?: string;
+  @IsBoolean()
+  guardar!: boolean;
 
-    @IsString()
-    fecha?: string;
-    
-    @IsString()
-    tutor?: string;
+  @IsString()
+  template!: string;
 
-    @IsString()
-    modalidad?: string;
+  @IsString()
+  materia?: string;
 
-    @IsString()
-    hora?: string;
+  @IsString()
+  fecha?: string;
 
-    @IsString()
-    razon?: string;
+  @IsString()
+  tutor?: string;
 
+  @IsString()
+  modalidad?: string;
+
+  @IsString()
+  hora?: string;
+
+  @IsString()
+  razon?: string;
 }
