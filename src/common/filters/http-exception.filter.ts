@@ -40,7 +40,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let error = 'Internal Server Error';
 
     if (this.isAxiosError(exception)) {
-      const axiosError = exception;
+      const axiosError = exception as AxiosErrorLike;
 
       if (axiosError.response) {
         status = axiosError.response.status;
