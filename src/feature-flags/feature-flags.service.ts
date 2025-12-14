@@ -13,12 +13,14 @@ export class FeatureFlagsService {
     const now = Date.now();
     const cached = this.cache.get(flagKey);
     if (cached && now - cached.fetchedAt < cached.ttl) {
+      this.logger.debug(`[Cache HIT] Flag '${flagKey}' = ${cached.value}`);
       return cached.value;
     }
 
+    this.logger.log(`[Cache MISS] Fetching flag '${flagKey}' from Remote Config...`);
     const rc = await getRemoteConfig();
     if (!rc) {
-      // Firebase not configured; return default
+      this.logger.warn(`Firebase Remote Config unavailable - using default value (${defaultValue}) for '${flagKey}'`);
       this.setCache(flagKey, defaultValue);
       return defaultValue;
     }
@@ -28,10 +30,11 @@ export class FeatureFlagsService {
       const param = template.parameters?.[flagKey];
       const raw = param?.defaultValue && 'value' in param.defaultValue ? param.defaultValue.value : undefined;
       const value = typeof raw === 'string' ? raw.toLowerCase() === 'true' : defaultValue;
+      this.logger.log(`✅ Remote Config fetched - Flag '${flagKey}' = ${value} (raw: ${raw})`);
       this.setCache(flagKey, value);
       return value;
     } catch (err) {
-      this.logger.error(`Failed to fetch Remote Config: ${err instanceof Error ? err.message : err}`);
+      this.logger.error(`❌ Failed to fetch Remote Config for '${flagKey}': ${err instanceof Error ? err.message : err}`);
       this.setCache(flagKey, defaultValue);
       return defaultValue;
     }
