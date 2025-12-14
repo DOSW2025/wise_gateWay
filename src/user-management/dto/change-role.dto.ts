@@ -6,7 +6,7 @@ export class ChangeRoleDto {
   @ApiProperty({
     description: 'ID del nuevo rol a asignar al usuario',
     example: 2,
-    type: Number
+    type: Number,
   })
   @IsInt()
   @IsPositive()

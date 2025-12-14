@@ -15,7 +15,8 @@ export class CompleteSessionDto {
 
   @ApiProperty({
     description: 'Comentarios finales del tutor sobre la sesión (opcional)',
-    example: 'Excelente sesión, el estudiante demostró buen entendimiento de los conceptos',
+    example:
+      'Excelente sesión, el estudiante demostró buen entendimiento de los conceptos',
     required: false,
   })
   @IsOptional()

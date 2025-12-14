@@ -32,12 +32,18 @@ async function gateway_main() {
   const config = new DocumentBuilder()
     .setTitle('Wise Gateway API')
     .setDescription(
-      'API Gateway para el ecosistema Wise - Gestiona la comunicación entre todos los microservicios del sistema (Autenticación, Gestión de Usuarios, Notificaciones y Tutorías)'
+      'API Gateway para el ecosistema Wise - Gestiona la comunicación entre todos los microservicios del sistema (Autenticación, Gestión de Usuarios, Notificaciones y Tutorías)',
     )
     .setVersion('1.0')
     .addTag('Auth', 'Endpoints de autenticación con Google OAuth')
-    .addTag('Gestión de Usuarios', 'Endpoints para administración de usuarios y perfiles')
-    .addTag('Notificaciones', 'Endpoints para el servicio de notificaciones (próximamente)')
+    .addTag(
+      'Gestión de Usuarios',
+      'Endpoints para administración de usuarios y perfiles',
+    )
+    .addTag(
+      'Notificaciones',
+      'Endpoints para el servicio de notificaciones (próximamente)',
+    )
     .addTag('Tutorías', 'Endpoints para el servicio de tutorías (próximamente)')
     .addBearerAuth(
       {
@@ -48,7 +54,7 @@ async function gateway_main() {
         description: 'Ingresa el token JWT obtenido después de autenticarte',
         in: 'header',
       },
-      'JWT-auth'
+      'JWT-auth',
     )
     .build();
 
@@ -70,6 +76,8 @@ async function gateway_main() {
   await app.listen(envs.port);
 
   logger.log(`Gateway running on port ${envs.port}`);
-  logger.log(`Swagger documentation available at http://localhost:${envs.port}/api/docs`);
+  logger.log(
+    `Swagger documentation available at http://localhost:${envs.port}/api/docs`,
+  );
 }
 gateway_main();

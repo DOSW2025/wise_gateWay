@@ -24,7 +24,7 @@ import { TutoriasModule } from './tutorias/tutorias.module';
     UserManagementModule,
     NotificacionesModule,
     MaterialesModule,
-    PdfExportModule,   
+    PdfExportModule,
     IaModule,
     ComunidadModule,
     TutoriasModule,

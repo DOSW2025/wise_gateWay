@@ -19,6 +19,8 @@ export class CancelSessionDto {
     minLength: 10,
   })
   @IsString({ message: 'La razón debe ser una cadena de texto' })
-  @MinLength(10, { message: 'La razón de cancelación debe tener al menos 10 caracteres' })
+  @MinLength(10, {
+    message: 'La razón de cancelación debe tener al menos 10 caracteres',
+  })
   razon: string;
 }

@@ -9,8 +9,6 @@ interface EnvVars {
   USER_MANAGEMENT_PORT: number;
   COMUNIDAD_HOST: string;
   COMUNIDAD_PORT: number;
-  COMUNIDAD_HOST: string;
-  COMUNIDAD_PORT: number;
   JWT_SECRET: string;
   FRONTEND_URL: string;
   AUTH_AZURE?: string;
@@ -72,7 +70,10 @@ export const envs = {
   comunidadHost: envVars.COMUNIDAD_HOST,
   comunidadPort: envVars.COMUNIDAD_PORT,
   jwtSecret: envVars.JWT_SECRET,
-  frontendUrl: (envVars.FRONTEND_URL.startsWith('http') ? envVars.FRONTEND_URL : `https://${envVars.FRONTEND_URL}`).replace(/\/$/, ''),
+  frontendUrl: (envVars.FRONTEND_URL.startsWith('http')
+    ? envVars.FRONTEND_URL
+    : `https://${envVars.FRONTEND_URL}`
+  ).replace(/\/$/, ''),
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
