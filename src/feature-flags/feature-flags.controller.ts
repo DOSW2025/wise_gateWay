@@ -1,21 +1,16 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FeatureFlagsService } from './feature-flags.service';
+import { GetFlagDto } from './dto/get-flag.dto';
 
 @Controller('feature-flags')
 export class FeatureFlagsController {
   constructor(private readonly flags: FeatureFlagsService) {}
 
-  // GET /wise/feature-flags/ia
-  @Get('ia')
-  async getIaFlag(@Query('default') defaultValue?: string) {
-    const def = (defaultValue ?? 'false').toLowerCase() === 'true';
-    const enabled = await this.flags.isEnabled('enable_ia_chat', def);
-    return { key: 'enable_ia_chat', enabled };
-  }
-
-  // GET /wise/feature-flags/:key
+  // GET /feature-flags/:key (relative to global prefix /wise)
   @Get(':key')
-  async getFlag(@Param('key') key: string, @Query('default') defaultValue?: string) {
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  async getFlag(@Param() params: GetFlagDto, @Query('default') defaultValue?: string) {
+    const { key } = params;
     const def = (defaultValue ?? 'false').toLowerCase() === 'true';
     const enabled = await this.flags.isEnabled(key, def);
     return { key, enabled };
