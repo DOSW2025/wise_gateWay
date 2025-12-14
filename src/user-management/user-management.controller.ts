@@ -176,21 +176,6 @@ export class UserManagementController {
   @Get('me')
   @ApiOperation({
     summary: 'Obtener mi perfil',
-    description:
-      'Devuelve la información del usuario autenticado (teléfono, biografía, rol y estado).',
-  })
-  @ApiResponse({ status: 200, description: 'Perfil obtenido exitosamente' })
-  @ApiResponse({
-    status: 401,
-    description: 'No autorizado - Token JWT inválido o ausente',
-  })
-  getMyProfile(@Req() request: Request) {
-    return this.userManagementService.getMyProfile(request);
-  }
-
-  @Get('me')
-  @ApiOperation({
-    summary: 'Obtener mi perfil',
     description: 'Obtiene la información completa del usuario autenticado actualmente.'
   })
   @ApiResponse({
