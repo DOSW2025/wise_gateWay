@@ -7,6 +7,10 @@ import {
   Body,
   UseGuards,
   Req,
+  Patch,
+  Query,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -14,11 +18,19 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { ComunidadService } from './comunidad.service';
-import { JwtAuthGuard } from '../auth';
-import { CreateGroupDto, SendMessageBodyDto } from './dto';
+import { JwtAuthGuard, Roles, RolesGuard } from '../auth';
+import { Role } from '../common/dto';
+import { CreateGroupDto, 
+  SendMessageBodyDto, 
+  CreateReportDto, 
+  UpdateReportStatusDto,
+  EstadoReporte,
+  TipoContenido,  
+} from './dto';
 
 // Main controller with root prefix for direct routes like /forums, /chats, etc
 @ApiTags('Comunidad - Forums & Chats')
@@ -418,5 +430,152 @@ export class ComunidadController {
   })
   async getVotes(@Req() request: Request) {
     return this.comunidadService.getVotes(request);
+  }
+
+  // ============ REPORTES - Direct routes ============
+  @Post('reportes')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Crear un nuevo reporte de contenido',
+    description:
+      'Permite a un usuario reportar contenido inapropiado de threads, respuestas o mensajes de chat.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'El reporte fue enviado correctamente',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos inválidos o incompletos',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'El contenido reportado no existe',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Ya has reportado este contenido previamente',
+  })
+  async createReport(
+    @Body() createReportDto: CreateReportDto,
+    @Req() request: Request,
+  ) {
+    return this.comunidadService.createReport(createReportDto, request);
+  }
+
+  @Get('reportes')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({
+    summary: 'Obtener todos los reportes',
+    description:
+      'Obtiene la lista de todos los reportes. Solo accesible para administradores.',
+  })
+  @ApiQuery({
+    name: 'estado',
+    required: false,
+    enum: EstadoReporte,
+    description: 'Filtrar reportes por estado',
+  })
+  @ApiQuery({
+    name: 'tipoContenido',
+    required: false,
+    enum: TipoContenido,
+    description: 'Filtrar reportes por tipo de contenido',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de reportes obtenida exitosamente',
+  })
+  async getAllReports(
+    @Query('estado') estado?: EstadoReporte,
+    @Query('tipoContenido') tipoContenido?: TipoContenido,
+    @Req() request?: Request,
+  ) {
+    return this.comunidadService.getAllReports(estado, tipoContenido, request);
+  }
+
+  @Get('reportes/estadisticas')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({
+    summary: 'Obtener estadísticas de reportes',
+    description: 'Obtiene estadísticas generales sobre los reportes del sistema.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Estadísticas obtenidas exitosamente',
+  })
+  async getReportStatistics(@Req() request: Request) {
+    return this.comunidadService.getReportStatistics(request);
+  }
+
+  @Get('reportes/mis-reportes')
+  @ApiOperation({
+    summary: 'Obtener reportes del usuario autenticado',
+    description: 'Obtiene todos los reportes realizados por el usuario actual.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de reportes del usuario obtenida exitosamente',
+  })
+  async getMyReports(@Req() request: Request) {
+    return this.comunidadService.getMyReports(request);
+  }
+
+  @Get('reportes/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({
+    summary: 'Obtener un reporte específico por ID',
+    description:
+      'Obtiene los detalles completos de un reporte incluyendo el historial de logs.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID del reporte',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Reporte obtenido exitosamente',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Reporte no encontrado',
+  })
+  async getReportById(@Param('id') id: string, @Req() request: Request) {
+    return this.comunidadService.getReportById(id, request);
+  }
+
+  @Patch('reportes/:id/estado')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({
+    summary: 'Actualizar el estado de un reporte',
+    description:
+      'Permite a administradores cambiar el estado de un reporte y añadir notas de moderación.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID del reporte',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Estado del reporte actualizado correctamente',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Reporte no encontrado',
+  })
+  async updateReportStatus(
+    @Param('id') id: string,
+    @Body() updateStatusDto: UpdateReportStatusDto,
+    @Req() request: Request,
+  ) {
+    return this.comunidadService.updateReportStatus(
+      id,
+      updateStatusDto,
+      request,
+    );
   }
 }
