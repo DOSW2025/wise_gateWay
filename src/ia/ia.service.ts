@@ -125,8 +125,4 @@ export class IaService {
       );
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80

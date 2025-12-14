@@ -4,9 +4,6 @@ import { firstValueFrom } from 'rxjs';
 import { envs } from '../config';
 import type { Request } from 'express';
 import { JwtForwardingHelper } from '../common/helpers';
-<<<<<<< HEAD
-import { FilterUsersDto, ChangeRoleDto, ChangeStatusDto, UpdatePersonalInfoDto, UserGrowthDto } from './dto';
-=======
 import {
   FilterUsersDto,
   ChangeRoleDto,
@@ -14,7 +11,6 @@ import {
   UpdatePersonalInfoDto,
   UserGrowthDto,
 } from './dto';
->>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
 
 @Injectable()
 export class UserManagementService {
@@ -47,14 +43,10 @@ export class UserManagementService {
       );
       return response.data;
     } catch (error) {
-<<<<<<< HEAD
-      this.logger.error(`Error forwarding filtered request to user management service`, error);
-=======
       this.logger.error(
         `Error forwarding filtered request to user management service`,
         error,
       );
->>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
       throw error;
     }
   }
@@ -164,13 +156,7 @@ export class UserManagementService {
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/usuarios`;
     try {
       this.logger.log(`Forwarding DELETE request to: ${url}`);
-<<<<<<< HEAD
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
-=======
       const response = await firstValueFrom(this.httpService.get(url, config));
->>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
       return response.data;
     } catch (error) {
       this.logger.error(`Error calculating stats`, error);
@@ -183,13 +169,7 @@ export class UserManagementService {
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/estadisticas/roles`;
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-<<<<<<< HEAD
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
-=======
       const response = await firstValueFrom(this.httpService.get(url, config));
->>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
       return response.data;
     } catch (error) {
       this.logger.error(`Error calculating role statistics`, error);
