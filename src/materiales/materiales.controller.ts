@@ -73,6 +73,32 @@ export class MaterialesController {
     return this.materialesService.getTopViewedMaterialsByUser(userId, request);
   }
 
+  /**
+   * GET /materiales/user/:userId/tags-percentage
+   * Obtener porcentaje de tags de materiales de un usuario
+   */
+  @Get('user/:userId/tags-percentage')
+  async getTagsPercentageByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTagsPercentageByUser(userId, request);
+  }
+
+
+  /**
+   * GET /materiales/search
+   * Buscar materiales por nombre con paginación
+   */
+  @Get('search')
+  async searchMaterialsByName(
+    @Query('nombre') nombre: string,
+    @Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
+    @Query('take', new DefaultValuePipe(10), ParseIntPipe) take: number,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.searchMaterialsByName(nombre, skip, take, request);
+  }
 
   /**
    * GET /materiales/stats/popular
@@ -164,17 +190,6 @@ export class MaterialesController {
     @Req() request: Request,
   ) {
     return this.materialesService.getMaterialDetail(id, request);
-  }
-
-  
-
-  /**
-   * GET /materiales/autocomplete
-   * Autocompletado de búsqueda de materiales
-   */
-  @Get('autocomplete')
-  async autocompleteMateriales(@Query() query: any, @Req() request: Request) {
-    return this.materialesService.autocompleteMaterials(query, request);
   }
 
   /**

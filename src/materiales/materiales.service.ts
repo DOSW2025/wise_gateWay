@@ -169,6 +169,25 @@ export class MaterialesService {
   }
 
   /**
+   * Obtener porcentaje de tags de materiales de un usuario
+   */
+  async getTagsPercentageByUser(userId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/user/${userId}/tags-percentage`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting tags percentage by user`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Obtener materiales populares
    */
   async getPopularMaterials(limit: number, request: Request) {
@@ -183,6 +202,25 @@ export class MaterialesService {
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting popular materials`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Buscar materiales por nombre
+   */
+  async searchMaterialsByName(nombre: string, skip: number, take: number, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/search?nombre=${encodeURIComponent(nombre)}&skip=${skip}&take=${take}`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error searching materials by name`, error);
       throw error;
     }
   }
@@ -337,34 +375,6 @@ export class MaterialesService {
       response.data.pipe(res);
     } catch (error) {
       this.logger.error(`Error downloading material`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Autocompletar materiales
-   */
-  async autocompleteMaterials(query: any, request: Request) {
-    const config = JwtForwardingHelper.getAxiosConfig(request);
-    
-    // Construir query params
-    const queryParams = new URLSearchParams();
-    Object.keys(query).forEach((key) => {
-      if (query[key] !== undefined && query[key] !== null && query[key] !== '') {
-        queryParams.append(key, query[key].toString());
-      }
-    });
-
-    const url = `${this.materialesServiceUrl}/autocomplete?${queryParams.toString()}`;
-
-    try {
-      this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
-      return response.data;
-    } catch (error) {
-      this.logger.error(`Error autocompleting materials`, error);
       throw error;
     }
   }
