@@ -15,7 +15,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-  ApiQuery,
+  ApiQuery
 } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { UserManagementService } from './user-management.service';
@@ -34,7 +34,7 @@ import { Role } from '../common/dto';
 @Controller('gestion-usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UserManagementController {
-  constructor(private readonly userManagementService: UserManagementService) {}
+  constructor(private readonly userManagementService: UserManagementService) { }
 
   @Get()
   @ApiOperation({
@@ -54,12 +54,9 @@ export class UserManagementController {
     description: 'Cantidad de registros por página',
     example: 10,
   })
-  @ApiQuery({
-    name: 'offset',
-    required: false,
-    description: 'Desplazamiento de registros',
-    example: 0,
-  })
+  @ApiQuery({ name: 'page', required: false, description: 'Número de página', example: 1 })
+  @ApiQuery({ name: 'limit', required: false, description: 'Cantidad de registros por página', example: 10 })
+  @ApiQuery({ name: 'offset', required: false, description: 'Desplazamiento de registros', example: 0 })
   @ApiResponse({
     status: 200,
     description: 'Lista de usuarios obtenida exitosamente',
@@ -101,11 +98,7 @@ export class UserManagementController {
     description:
       'Permite a un administrador cambiar el rol de cualquier usuario del sistema.',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'ID del usuario a modificar',
-    example: '123',
-  })
+  @ApiParam({ name: 'id', description: 'ID del usuario a modificar', example: '123' })
   @ApiResponse({
     status: 200,
     description: 'Rol actualizado exitosamente',
@@ -144,11 +137,7 @@ export class UserManagementController {
     description:
       'Permite a un administrador cambiar el estado de un usuario (activo, inactivo, suspendido, etc.).',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'ID del usuario a modificar',
-    example: '123',
-  })
+  @ApiParam({ name: 'id', description: 'ID del usuario a modificar', example: '123' })
   @ApiResponse({
     status: 200,
     description: 'Estado actualizado exitosamente',
@@ -187,14 +176,32 @@ export class UserManagementController {
   @Get('me')
   @ApiOperation({
     summary: 'Obtener mi perfil',
-    description:
-      'Devuelve la información del usuario autenticado (teléfono, biografía, rol y estado).',
+    description: 'Obtiene la información completa del usuario autenticado actualmente.'
   })
-  @ApiResponse({ status: 200, description: 'Perfil obtenido exitosamente' })
   @ApiResponse({
-    status: 401,
-    description: 'No autorizado - Token JWT inválido o ausente',
+    status: 200,
+    description: 'Perfil obtenido exitosamente',
+    schema: {
+      example: {
+        id: '123',
+        nombre: 'Juan',
+        apellido: 'Pérez',
+        email: 'juan@example.com',
+        telefono: '1234567890',
+        biografia: 'Mi biografía',
+        semestre: 5,
+        rol: {
+          id: 1,
+          nombre: 'estudiante'
+        },
+        estado: {
+          id: 1,
+          nombre: 'activo'
+        }
+      }
+    }
   })
+  @ApiResponse({ status: 401, description: 'No autorizado - Token JWT inválido o ausente' })
   getMyProfile(@Req() request: Request) {
     return this.userManagementService.getMyProfile(request);
   }
@@ -240,11 +247,7 @@ export class UserManagementController {
     description:
       'Permite a un administrador eliminar permanentemente un usuario del sistema.',
   })
-  @ApiParam({
-    name: 'id',
-    description: 'ID del usuario a eliminar',
-    example: '123',
-  })
+  @ApiParam({ name: 'id', description: 'ID del usuario a eliminar', example: '123' })
   @ApiResponse({
     status: 200,
     description: 'Usuario eliminado exitosamente',
