@@ -10,7 +10,6 @@ export class NotificacionesService {
   private readonly logger = new Logger(NotificacionesService.name);
   private readonly userNotifyService: string;
 
-
   constructor(private readonly httpService: HttpService) {
     let url = envs.notificacionesAzure;
 
@@ -31,9 +30,7 @@ export class NotificacionesService {
     const url = `${this.userNotifyService}/${userid}`;
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error with user notify consult`, error);
@@ -46,9 +43,7 @@ export class NotificacionesService {
     const url = `${this.userNotifyService}/unread-count/${userid}`;
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, config),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error with user notify consult`, error);

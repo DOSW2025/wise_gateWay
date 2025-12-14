@@ -21,6 +21,9 @@ interface EnvVars {
   COMUNIDAD_AZURE?: string;
   IA_AZURE?: string;
   IA_PORT?: number;
+  TUTORIAS_AZURE?: string;
+  TUTORIAS_PORT?: number;
+  TUTORIAS_HOST?: string;
 }
 
 const envsSchema = joi
@@ -44,6 +47,9 @@ const envsSchema = joi
     COMUNIDAD_AZURE: joi.string().optional(),
     IA_AZURE: joi.string().optional(),
     IA_PORT: joi.number().optional(),
+    TUTORIAS_AZURE: joi.string().optional(),
+    TUTORIAS_PORT: joi.number().optional(),
+    TUTORIAS_HOST: joi.string().optional(),
   })
   .unknown(true);
 
@@ -64,7 +70,10 @@ export const envs = {
   comunidadHost: envVars.COMUNIDAD_HOST,
   comunidadPort: envVars.COMUNIDAD_PORT,
   jwtSecret: envVars.JWT_SECRET,
-  frontendUrl: (envVars.FRONTEND_URL.startsWith('http') ? envVars.FRONTEND_URL : `https://${envVars.FRONTEND_URL}`).replace(/\/$/, ''),
+  frontendUrl: (envVars.FRONTEND_URL.startsWith('http')
+    ? envVars.FRONTEND_URL
+    : `https://${envVars.FRONTEND_URL}`
+  ).replace(/\/$/, ''),
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
@@ -75,4 +84,7 @@ export const envs = {
   comunidadAzure: envVars.COMUNIDAD_AZURE,
   iaAzure: envVars.IA_AZURE,
   iaPort: envVars.IA_PORT,
+  tutoriasAzure: envVars.TUTORIAS_AZURE,
+  tutoriasPort: envVars.TUTORIAS_PORT,
+  tutoriasHost: envVars.TUTORIAS_HOST,
 };

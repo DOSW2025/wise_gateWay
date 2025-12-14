@@ -79,7 +79,7 @@ export class HttpProxyHelper {
 
     return {
       data: response.data,
-      headers: response.headers as Record<string, unknown>,
+      headers: response.headers,
       status: response.status,
     };
   }

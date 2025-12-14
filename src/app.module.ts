@@ -9,6 +9,7 @@ import { PdfExportModule } from './pdf-export/pdf-export.module';
 import { ComunidadModule } from './comunidad/comunidad.module';
 import { IaModule } from './ia/ia.module';
 import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.filter';
+import { TutoriasModule } from './tutorias/tutorias.module';
 
 @Module({
   imports: [
@@ -25,7 +26,10 @@ import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.f
     MaterialesModule,
     PdfExportModule,   
     IaModule,
-    ComunidadModule
+    ComunidadModule,
+    IaModule,
+    ComunidadModule,
+    TutoriasModule,
   ],
   controllers: [],
   providers: [

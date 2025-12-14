@@ -1,4 +1,11 @@
-import { IsArray, IsEmail, IsNotEmpty, IsString, MaxLength, ArrayMinSize } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  ArrayMinSize,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGroupDto {

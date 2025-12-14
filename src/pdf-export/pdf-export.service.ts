@@ -26,15 +26,15 @@ export class PdfExportService {
   async exportMaterialStats(id: string, request: Request, res: Response) {
     const baseConfig = JwtForwardingHelper.getAxiosConfig(request);
     const config = {
-        ...baseConfig,
-        responseType: 'stream' as const,
+      ...baseConfig,
+      responseType: 'stream' as const,
     };
-        
+
     const url = `${this.materialesServiceUrl}/${id}/stats/export`;
 
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
-      
+  
       // Usar axios directamente para obtener el stream
       const response = await axios.get(url, config);
 

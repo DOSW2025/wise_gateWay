@@ -11,18 +11,17 @@ export class IaService {
   private readonly baseUrl: string;
 
   constructor(private readonly httpService: HttpService) {
-   let url = envs.iaAzure;
-   
-       if (!url) {
-         throw new Error('IA_AZURE environment variable is required');
-       }
-   
-       if (!url.startsWith('http://') && !url.startsWith('https://')) {
-         url = `https://${url}`;
-       }
-   
-       this.baseUrl = url;
+    let url = envs.iaAzure;
 
+    if (!url) {
+      throw new Error('IA_AZURE environment variable is required');
+    }
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = `https://${url}`;
+    }
+
+    this.baseUrl = url;
   }
 
   async getSwaggerJson() {
@@ -126,4 +125,8 @@ export class IaService {
       );
     }
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80

@@ -1,4 +1,24 @@
+<<<<<<< HEAD
 import {Controller,Param,Req,Get,Post,Put,Delete,Body,Query,UseGuards,UseInterceptors,UploadedFile,Res,ParseIntPipe,DefaultValuePipe,Logger,} from '@nestjs/common';
+=======
+import {
+  Controller,
+  Param,
+  Req,
+  Get,
+  Post,
+  Put,
+  Body,
+  Query,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Res,
+  ParseIntPipe,
+  DefaultValuePipe,
+  Logger,
+} from '@nestjs/common';
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaterialesService } from './materiales.service';
 import type { Request, Response, Express } from 'express';
@@ -38,6 +58,7 @@ export class MaterialesController {
   }
 
   /**
+<<<<<<< HEAD
    * GET /materiales/user/:userId/stats
    * Obtener estadísticas de materiales de un usuario
    */
@@ -101,6 +122,8 @@ export class MaterialesController {
   }
 
   /**
+=======
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
    * GET /materiales/stats/popular
    * Obtener materiales más populares
    */
@@ -147,6 +170,7 @@ export class MaterialesController {
   }
 
   /**
+<<<<<<< HEAD
    * GET /materiales/:id/ratings/list
    * Obtener lista de calificaciones de un material
    */
@@ -159,6 +183,8 @@ export class MaterialesController {
   }
 
   /**
+=======
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
    * GET /materiales/:id/download
    * Descargar un material específico
    */
@@ -185,14 +211,19 @@ export class MaterialesController {
    * Obtener información detallada de un material específico
    */
   @Get(':id')
+<<<<<<< HEAD
   async getMaterialDetail(
     @Param('id') id: string,
     @Req() request: Request,
   ) {
+=======
+  async getMaterialDetail(@Param('id') id: string, @Req() request: Request) {
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
     return this.materialesService.getMaterialDetail(id, request);
   }
 
   /**
+<<<<<<< HEAD
    * DELETE /materiales/:id
    * Eliminar un material específico
    */
@@ -202,6 +233,14 @@ export class MaterialesController {
     @Req() request: Request,
   ) {
     return this.materialesService.deleteMaterial(materialId, request);
+=======
+   * GET /materiales/autocomplete
+   * Autocompletado de búsqueda de materiales
+   */
+  @Get('autocomplete')
+  async autocompleteMateriales(@Query() query: any, @Req() request: Request) {
+    return this.materialesService.autocompleteMaterials(query, request);
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
   }
 
   /**
@@ -212,9 +251,15 @@ export class MaterialesController {
   @UseInterceptors(FileInterceptor('file'))
   async actualizarMaterialVersion(
     @Param('id') materialId: string,
+<<<<<<< HEAD
     @Req() request: Request,
     @UploadedFile() file?: Express.Multer.File,
     @Body() body: any = {},
+=======
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: any,
+    @Req() request: Request,
+>>>>>>> 3fcc1564b689bcae8d6a0111746603fe35812b80
   ) {
     return this.materialesService.actualizarMaterialVersion(
       materialId,
