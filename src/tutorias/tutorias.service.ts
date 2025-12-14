@@ -433,4 +433,16 @@ export class TutoriasService {
       }
     }
 
+    async findById(Id: string, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/tutors/${Id}`;
+      try {
+        this.logger.log(`Forwarding GET request to: ${url}`);
+        const response = await firstValueFrom(this.httpService.get(url, config));
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding GET /api/tutors/${Id}`, error);
+        throw error;
+      }
+    }
 }
