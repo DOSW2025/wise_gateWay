@@ -24,6 +24,10 @@ interface EnvVars {
   TUTORIAS_AZURE?: string;
   TUTORIAS_PORT?: number;
   TUTORIAS_HOST?: string;
+  FIREBASE_PROJECT_ID?: string;
+  FIREBASE_CLIENT_EMAIL?: string;
+  FIREBASE_PRIVATE_KEY?: string;
+  FEATURE_FLAGS_REFRESH_MS?: number;
 }
 
 const envsSchema = joi
@@ -50,6 +54,10 @@ const envsSchema = joi
     TUTORIAS_AZURE: joi.string().optional(),
     TUTORIAS_PORT: joi.number().optional(),
     TUTORIAS_HOST: joi.string().optional(),
+    FIREBASE_PROJECT_ID: joi.string().optional(),
+    FIREBASE_CLIENT_EMAIL: joi.string().optional(),
+    FIREBASE_PRIVATE_KEY: joi.string().optional(),
+    FEATURE_FLAGS_REFRESH_MS: joi.number().optional(),
   })
   .unknown(true);
 
@@ -87,4 +95,8 @@ export const envs = {
   tutoriasAzure: envVars.TUTORIAS_AZURE,
   tutoriasPort: envVars.TUTORIAS_PORT,
   tutoriasHost: envVars.TUTORIAS_HOST,
+  firebaseProjectId: envVars.FIREBASE_PROJECT_ID,
+  firebaseClientEmail: envVars.FIREBASE_CLIENT_EMAIL,
+  firebasePrivateKey: envVars.FIREBASE_PRIVATE_KEY,
+  featureFlagsRefreshMs: envVars.FEATURE_FLAGS_REFRESH_MS,
 };
