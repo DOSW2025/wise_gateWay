@@ -237,5 +237,9 @@ export class TutoriasController {
     return this.tutoriasService.getConfirmedSessions(id, req);
   }
 
+  @Get(':id/tutor')
+  findById(@Param('id') id: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.findById(id, req);
+  }
 }
 
