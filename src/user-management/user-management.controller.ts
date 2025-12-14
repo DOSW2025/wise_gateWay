@@ -9,13 +9,13 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
-import { 
-  ApiTags, 
-  ApiOperation, 
-  ApiResponse, 
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
   ApiBearerAuth,
   ApiParam,
-  ApiQuery 
+  ApiQuery
 } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { UserManagementService } from './user-management.service';
@@ -28,7 +28,7 @@ import { Role } from '../common/dto';
 @Controller('gestion-usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UserManagementController {
-  constructor(private readonly userManagementService: UserManagementService) {}
+  constructor(private readonly userManagementService: UserManagementService) { }
 
   @Get()
   @ApiOperation({
@@ -38,8 +38,8 @@ export class UserManagementController {
   @ApiQuery({ name: 'page', required: false, description: 'Número de página', example: 1 })
   @ApiQuery({ name: 'limit', required: false, description: 'Cantidad de registros por página', example: 10 })
   @ApiQuery({ name: 'offset', required: false, description: 'Desplazamiento de registros', example: 0 })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Lista de usuarios obtenida exitosamente',
     schema: {
       example: {
@@ -68,13 +68,13 @@ export class UserManagementController {
 
   @Patch(':id/rol')
   @Roles(Role.ADMIN)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cambiar el rol de un usuario',
     description: 'Permite a un administrador cambiar el rol de cualquier usuario del sistema.'
   })
   @ApiParam({ name: 'id', description: 'ID del usuario a modificar', example: '123' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Rol actualizado exitosamente',
     schema: {
       example: {
@@ -100,13 +100,13 @@ export class UserManagementController {
 
   @Patch(':id/estado')
   @Roles(Role.ADMIN)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Cambiar el estado de un usuario',
     description: 'Permite a un administrador cambiar el estado de un usuario (activo, inactivo, suspendido, etc.).'
   })
   @ApiParam({ name: 'id', description: 'ID del usuario a modificar', example: '123' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Estado actualizado exitosamente',
     schema: {
       example: {
@@ -130,13 +130,46 @@ export class UserManagementController {
     return this.userManagementService.changeStatus(id, changeStatusDto, request);
   }
 
+  @Get('me')
+  @ApiOperation({
+    summary: 'Obtener mi perfil',
+    description: 'Obtiene la información completa del usuario autenticado actualmente.'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Perfil obtenido exitosamente',
+    schema: {
+      example: {
+        id: '123',
+        nombre: 'Juan',
+        apellido: 'Pérez',
+        email: 'juan@example.com',
+        telefono: '1234567890',
+        biografia: 'Mi biografía',
+        semestre: 5,
+        rol: {
+          id: 1,
+          nombre: 'estudiante'
+        },
+        estado: {
+          id: 1,
+          nombre: 'activo'
+        }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'No autorizado - Token JWT inválido o ausente' })
+  getMyProfile(@Req() request: Request) {
+    return this.userManagementService.getMyProfile(request);
+  }
+
   @Patch('me/info-personal')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Actualizar mi información personal',
     description: 'Permite a cualquier usuario autenticado actualizar su propia información personal (teléfono, biografía).'
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Información personal actualizada exitosamente',
     schema: {
       example: {
@@ -159,13 +192,13 @@ export class UserManagementController {
 
   @Delete(':id')
   @Roles(Role.ADMIN)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Eliminar un usuario (Solo Admin)',
     description: 'Permite a un administrador eliminar permanentemente un usuario del sistema.'
   })
   @ApiParam({ name: 'id', description: 'ID del usuario a eliminar', example: '123' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Usuario eliminado exitosamente',
     schema: {
       example: {
@@ -181,12 +214,12 @@ export class UserManagementController {
   }
 
   @Delete('me/cuenta')
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Eliminar mi propia cuenta',
     description: 'Permite a cualquier usuario autenticado eliminar su propia cuenta del sistema.'
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Cuenta eliminada exitosamente',
     schema: {
       example: {

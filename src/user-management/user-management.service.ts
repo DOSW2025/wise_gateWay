@@ -74,6 +74,22 @@ export class UserManagementService {
     }
   }
 
+  async getMyProfile(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/me`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting user profile`, error);
+      throw error;
+    }
+  }
+
   async updateMyPersonalInfo(updatePersonalInfoDto: UpdatePersonalInfoDto, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
     const url = `${this.userManagementServiceUrl}/gestion-usuarios/me/info-personal`;
