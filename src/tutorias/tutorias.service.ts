@@ -445,4 +445,77 @@ export class TutoriasService {
         throw error;
       }
     }
+
+    async createSubject(createSubjectDto: any, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/subjects`;
+      try {
+        this.logger.log(`Forwarding POST request to: ${url}`);
+        const response = await firstValueFrom(
+          this.httpService.post(url, createSubjectDto, config),
+        );
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding POST subjects`, error);
+        throw error;
+      }
+    }
+
+    async findAllSubjects(query: any, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/subjects`;
+      try {
+        this.logger.log(`Forwarding GET request to: ${url}`);
+        const response = await firstValueFrom(
+          this.httpService.get(url, { ...config, params: query }),
+        );
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding GET subjects`, error);
+        throw error;
+      }
+    }
+
+      async findSubjectByCodigo(codigo: string, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/subjects/codigo/${codigo}`;
+      try {
+        this.logger.log(`Forwarding GET request to: ${url}`);
+        const response = await firstValueFrom(this.httpService.get(url, config));
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding GET subjects/codigo/${codigo}`, error);
+        throw error;
+      }
+    }
+
+    async updateSubject(codigo: string, updateSubjectDto: any, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/subjects/${codigo}`;
+      try {
+        this.logger.log(`Forwarding PATCH request to: ${url}`);
+        const response = await firstValueFrom(
+          this.httpService.patch(url, updateSubjectDto, config),
+        );
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding PATCH subjects/${codigo}`, error);
+        throw error;
+      }
+    }
+
+    async removeSubject(codigo: string, req: Request) {
+      const config = JwtForwardingHelper.getAxiosConfig(req);
+      const url = `${this.tutoriasManagementServiceUrl}/api/subjects/${codigo}`;
+      try {
+        this.logger.log(`Forwarding DELETE request to: ${url}`);
+        const response = await firstValueFrom(this.httpService.delete(url, config));
+        return response.data;
+      } catch (error) {
+        this.logger.error(`Error forwarding DELETE subjects/${codigo}`, error);
+        throw error;
+      }
+    }
+
+
 }

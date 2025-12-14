@@ -2,25 +2,24 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Query } fro
 import type { Request as ExpressRequest } from 'express';
 import { TutoriasService } from './tutorias.service';
 import {
-  CreateTutoriaDto,
-  UpdateTutoriaDto,
   FindUserByIdDto,
-  FindUserByEmailDto,
   UpdateAvailabilityDto,
   CreateTutorDto,
   AddMateriasDto,
   RemoveMateriasDto,
   GetPopularSubjectsDto,
   CreateSessionDto,
-  FindSessionByIdDto,
   ConfirmSessionDto,
   RejectSessionDto,
   CancelSessionDto,
   CompleteSessionDto,
   CreateRatingDto,
+  CreateSubjectDto,
+  FindSubjectDto,
+  UpdateSubjectDto,
 } from './dto';
-import { JwtAuthGuard, RolesGuard, Roles, Public } from '../auth'; 
-import { Role } from '../common/dto'; 
+import {Roles, Public } from '../auth';
+import { Role } from '../common/dto';
 @Controller('tutorias')
 export class TutoriasController {
   constructor(private readonly tutoriasService: TutoriasService) {}
@@ -50,15 +49,6 @@ export class TutoriasController {
   getPopularSubjects(@Query() query: GetPopularSubjectsDto, @Request() req: ExpressRequest) {
     return this.tutoriasService.getPopularSubjects(query.limit ?? 10, req);
   }
-
-  @Post()
-  @Roles(Role.ADMIN)
-  createTutor(@Body() createTutorDto: CreateTutorDto, @Request() req: ExpressRequest) {
-    return this.tutoriasService.create(createTutorDto, req);
-  }
-
-
-
 
   @Patch('id/:id/availability')
   @Roles(Role.TUTOR, Role.ESTUDIANTE)
@@ -110,17 +100,7 @@ export class TutoriasController {
     return this.tutoriasService.getTutorMaterias(id, req);
   }
 
-  @Post(':id/materias')
-  @Roles(Role.ADMIN, Role.TUTOR)
-  addMaterias(@Param('id') id: string, @Body() addMateriasDto: AddMateriasDto, @Request() req: ExpressRequest) {
-    return this.tutoriasService.addMaterias(id, addMateriasDto, req);
-  }
 
-  @Delete(':id/materias')
-  @Roles(Role.ADMIN, Role.TUTOR)
-  removeMaterias(@Param('id') id: string, @Body() removeMateriasDto: RemoveMateriasDto, @Request() req: ExpressRequest) {
-    return this.tutoriasService.removeMaterias(id, removeMateriasDto, req);
-  }
 
   // ==================== SESIONES (Crear y Gestionar) ====================
   @Post('sessions')
@@ -212,11 +192,6 @@ export class TutoriasController {
     return this.tutoriasService.getFullNameById(params.id, req);
   }
 
-  @Get('materia/:codigo')
-  findByCodigo(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
-    return this.tutoriasService.findByCodigo(codigo, req);
-  }
-
   @Get('upcoming/:userId')
   findUpcomingSessions(@Param('userId') userId: string, @Request() req: ExpressRequest) {
     return this.tutoriasService.findUpcomingSessions(userId, req);
@@ -241,5 +216,71 @@ export class TutoriasController {
   findById(@Param('id') id: string, @Request() req: ExpressRequest) {
     return this.tutoriasService.findById(id, req);
   }
-}
 
+  @Post('create-tutor')
+  @Roles(Role.ADMIN)
+  createTutor(
+    @Body() createTutorDto: CreateTutorDto,
+    @Request() req: ExpressRequest,
+  ) {
+    return this.tutoriasService.create(createTutorDto, req);
+  }
+
+  @Post(':id/materias')
+  @Roles(Role.ADMIN, Role.TUTOR)
+  addMaterias(
+    @Param('id') id: string,
+    @Body() addMateriasDto: AddMateriasDto,
+    @Request() req: ExpressRequest,
+  ) {
+    return this.tutoriasService.addMaterias(id, addMateriasDto, req);
+  }
+
+  @Delete(':id/materias')
+  @Roles(Role.ADMIN, Role.TUTOR)
+  removeMaterias(
+    @Param('id') id: string,
+    @Body() removeMateriasDto: RemoveMateriasDto,
+    @Request() req: ExpressRequest,
+  ) {
+    return this.tutoriasService.removeMaterias(id, removeMateriasDto, req);
+  }
+
+
+  // ================== MATERIAS ==================
+
+  // 1. Crear una nueva materia
+  @Post('materias')
+  @Roles(Role.ADMIN)
+  create(@Body() createSubjectDto: CreateSubjectDto, @Request() req: ExpressRequest) {
+    return this.tutoriasService.createSubject(createSubjectDto, req);
+  }
+
+  // 2. Listar todas las materias
+  @Get('materias')
+  @Public()
+  findAll(@Query() query: FindSubjectDto, @Request() req: ExpressRequest) {
+    return this.tutoriasService.findAllSubjects(query, req);
+  }
+
+  // 3. Obtener materia por código
+  @Get('materias/codigo/:codigo')
+  @Public()
+  findByCodigo(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.findSubjectByCodigo(codigo, req);
+  }
+
+  // 5. Actualizar materia
+  @Patch('materias/codigo/:codigo')
+  @Roles(Role.ADMIN)
+  update(@Param('codigo') codigo: string, @Body() updateSubjectDto: UpdateSubjectDto, @Request() req: ExpressRequest) {
+    return this.tutoriasService.updateSubject(codigo, updateSubjectDto, req);
+  }
+
+  // 6. Eliminar materia
+  @Delete('materias/codigo/:codigo')
+  @Roles(Role.ADMIN)
+  remove(@Param('codigo') codigo: string, @Request() req: ExpressRequest) {
+    return this.tutoriasService.removeSubject(codigo, req);
+  }
+}
