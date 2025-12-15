@@ -270,12 +270,13 @@ export class UserManagementController {
     return this.userManagementService.deleteUserByAdmin(id, request);
   }
 
-  @Delete('me/cuenta')
+  @Delete('me/cuenta/:id')
   @ApiOperation({
     summary: 'Eliminar mi propia cuenta',
     description:
       'Permite a cualquier usuario autenticado eliminar su propia cuenta del sistema.',
   })
+  @ApiParam({ name: 'id', description: 'ID de la cuenta a eliminar', example: '123' })
   @ApiResponse({
     status: 200,
     description: 'Cuenta eliminada exitosamente',
@@ -289,11 +290,10 @@ export class UserManagementController {
     status: 401,
     description: 'No autorizado - Token JWT inválido o ausente',
   })
-  deleteMyAccount(@Req() request: Request) {
-    return this.userManagementService.deleteMyAccount(request);
+  deleteMyAccount(@Param('id') id: string, @Req() request: Request) {
+    return this.userManagementService.deleteMyAccount(id, request);
   }
   @Get('estadisticas/usuarios')
-  @Roles(Role.ADMIN)
   getUserStatistics(@Req() request: Request) {
     return this.userManagementService.getUserStatistics(request);
   }
