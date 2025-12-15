@@ -135,9 +135,9 @@ export class UserManagementService {
     }
   }
 
-  async deleteMyAccount(request: Request) {
+  async deleteMyAccount(id: string, request: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(request);
-    const url = `${this.userManagementServiceUrl}/gestion-usuarios/me/cuenta`;
+    const url = `${this.userManagementServiceUrl}/gestion-usuarios/${id}`;
 
     try {
       this.logger.log(`Forwarding DELETE request to: ${url}`);
