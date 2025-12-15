@@ -83,7 +83,7 @@ export class TutoriasService {
 
   async findTutores(req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
-    const url = `${this.tutoriasManagementServiceUrl}/api/users/tutors`;
+    const url = `${this.tutoriasManagementServiceUrl}/api/users/tutores`;
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
       const response = await firstValueFrom(this.httpService.get(url, config));
