@@ -40,7 +40,8 @@ export class TutoriasService {
       throw error;
     }
   }
-
+  
+  //
   async updateAvailabilityByEmail(email: string, disponibilidad: any, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
     const url = `${this.tutoriasManagementServiceUrl}/api/users/email/${email}/availability`;
