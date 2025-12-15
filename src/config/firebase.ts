@@ -42,6 +42,18 @@ export async function getFirebaseApp(): Promise<admin.app.App | null> {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       logger.error(`❌ Firebase initialization failed: ${errorMessage}`);
+      
+      // Provide specific troubleshooting hints based on error type
+      if (errorMessage.includes('PEM')) {
+        logger.error('💡 Hint: Check FIREBASE_PRIVATE_KEY format - remove quotes, keep \\n escapes');
+      } else if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('ETIMEDOUT')) {
+        logger.error('💡 Hint: Network issue - check internet connectivity or firewall rules');
+      } else if (errorMessage.includes('invalid') && errorMessage.includes('service account')) {
+        logger.error('💡 Hint: Service account may be revoked - regenerate credentials in Firebase Console');
+      } else if (errorMessage.includes('Project')) {
+        logger.error('💡 Hint: Verify FIREBASE_PROJECT_ID matches your Firebase project');
+      }
+      
       if (error instanceof Error && error.stack) {
         logger.error(`🔍 Stack trace: ${error.stack.split('\n').slice(0, 3).join(' | ')}`);
       }

@@ -37,12 +37,29 @@ export class FeatureFlagsService implements OnModuleInit {
       const param = template.parameters?.[flagKey];
       const raw = param?.defaultValue && 'value' in param.defaultValue ? param.defaultValue.value : undefined;
       const value = typeof raw === 'string' ? raw.toLowerCase() === 'true' : defaultValue;
-      this.logger.log(`✅ Remote Config fetched - Flag '${flagKey}' = ${value} (raw: ${raw})`);
+      
+      if (raw === undefined) {
+        this.logger.warn(`⚠️ Flag '${flagKey}' not found in Remote Config - using default (${defaultValue})`);
+        this.logger.warn(`💡 Hint: Create flag '${flagKey}' in Firebase Console → Remote Config`);
+      } else {
+        this.logger.log(`✅ Remote Config fetched - Flag '${flagKey}' = ${value} (raw: ${raw})`);
+      }
+      
       this.setCache(flagKey, value);
       return value;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       this.logger.error(`❌ Failed to fetch Remote Config for '${flagKey}': ${errorMessage}`);
+      
+      // Provide specific troubleshooting hints
+      if (errorMessage.includes('403') || errorMessage.includes('Permission denied')) {
+        this.logger.error('💡 Hint: Service account lacks permissions - grant "Firebase Remote Config Admin" role in IAM');
+      } else if (errorMessage.includes('API has not been used')) {
+        this.logger.error('💡 Hint: Enable Firebase Remote Config API in Google Cloud Console');
+      } else if (errorMessage.includes('ETIMEDOUT') || errorMessage.includes('ENOTFOUND')) {
+        this.logger.error('💡 Hint: Network connectivity issue - check firewall or DNS settings');
+      }
+      
       if (err instanceof Error && err.stack) {
         this.logger.error(`🔍 Error details: ${err.stack.split('\n').slice(0, 2).join(' | ')}`);
       }
