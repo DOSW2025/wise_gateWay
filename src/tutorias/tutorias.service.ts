@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable , Logger} from '@nestjs/common';
 import { CreateTutoriaDto } from './dto/create-tutoria.dto';
 import { UpdateTutoriaDto } from './dto/update-tutoria.dto';
 import { HttpService } from '@nestjs/axios';
@@ -83,13 +83,13 @@ export class TutoriasService {
 
   async findTutores(req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
-    const url = `${this.tutoriasManagementServiceUrl}/api/users/tutores`;
+    const url = `${this.tutoriasManagementServiceUrl}/api/users/tutors`;
     try {
       this.logger.log(`Forwarding GET request to: ${url}`);
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET users/tutores`, error);
+      this.logger.error(`Error forwarding GET users/tutors`, error);
       throw error;
     }
   }
@@ -115,7 +115,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores by-materia`, error);
+      this.logger.error(`Error forwarding GET tutors by-materia`, error);
       throw error;
     }
   }
@@ -128,7 +128,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores ratings`, error);
+      this.logger.error(`Error forwarding GET tutors ratings`, error);
       throw error;
     }
   }
@@ -141,7 +141,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores reputacion`, error);
+      this.logger.error(`Error forwarding GET tutors reputacion`, error);
       throw error;
     }
   }
@@ -154,7 +154,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores materias`, error);
+      this.logger.error(`Error forwarding GET tutors materias`, error);
       throw error;
     }
   }
@@ -167,7 +167,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.post(url, addMateriasDto, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding POST tutores materias`, error);
+      this.logger.error(`Error forwarding POST tutors materias`, error);
       throw error;
     }
   }
@@ -180,7 +180,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.delete(url, { ...config, data: removeMateriasDto }));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding DELETE tutores materias`, error);
+      this.logger.error(`Error forwarding DELETE tutors materias`, error);
       throw error;
     }
   }
