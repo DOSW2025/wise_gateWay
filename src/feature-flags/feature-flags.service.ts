@@ -1,13 +1,20 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { getRemoteConfig } from '../config/firebase';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { getRemoteConfig, getFirebaseApp } from '../config/firebase';
 import { envs } from '../config/envs';
 import { CacheEntry } from './types';
 
 @Injectable()
-export class FeatureFlagsService {
+export class FeatureFlagsService implements OnModuleInit {
   private readonly logger = new Logger(FeatureFlagsService.name);
   private cache = new Map<string, CacheEntry<boolean>>();
   private defaultTtl = envs.featureFlagsRefreshMs ?? (process.env.NODE_ENV === 'production' ? 300_000 : 1_000);
+
+  async onModuleInit() {
+    this.logger.log('🚀 Initializing Feature Flags Service...');
+    // Trigger Firebase initialization on app startup to see logs immediately
+    await getFirebaseApp();
+    this.logger.log('📋 Feature Flags Service ready');
+  }
 
   async isEnabled(flagKey: string, defaultValue = false): Promise<boolean> {
     const now = Date.now();
