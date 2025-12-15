@@ -1,0 +1,74 @@
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { getRemoteConfig, getFirebaseApp } from '../config/firebase';
+import { envs } from '../config/envs';
+import { CacheEntry } from './types';
+
+@Injectable()
+export class FeatureFlagsService implements OnModuleInit {
+  private readonly logger = new Logger(FeatureFlagsService.name);
+  private cache = new Map<string, CacheEntry<boolean>>();
+  private defaultTtl = envs.featureFlagsRefreshMs ?? (process.env.NODE_ENV === 'production' ? 300_000 : 1_000);
+
+  async onModuleInit() {
+    this.logger.log('🚀 Initializing Feature Flags Service...');
+    // Trigger Firebase initialization on app startup to see logs immediately
+    await getFirebaseApp();
+    this.logger.log('📋 Feature Flags Service ready');
+  }
+
+  async isEnabled(flagKey: string, defaultValue = false): Promise<boolean> {
+    const now = Date.now();
+    const cached = this.cache.get(flagKey);
+    if (cached && now - cached.fetchedAt < cached.ttl) {
+      this.logger.debug(`💾 [Cache HIT] Flag '${flagKey}' = ${cached.value}`);
+      return cached.value;
+    }
+
+    this.logger.log(`🔍 [Cache MISS] Fetching flag '${flagKey}' from Remote Config...`);
+    const rc = await getRemoteConfig();
+    if (!rc) {
+      this.logger.warn(`⚠️ Firebase Remote Config unavailable - using default value (${defaultValue}) for '${flagKey}'`);
+      this.setCache(flagKey, defaultValue);
+      return defaultValue;
+    }
+
+    try {
+      const template = await rc.getTemplate();
+      const param = template.parameters?.[flagKey];
+      const raw = param?.defaultValue && 'value' in param.defaultValue ? param.defaultValue.value : undefined;
+      const value = typeof raw === 'string' ? raw.toLowerCase() === 'true' : defaultValue;
+      
+      if (raw === undefined) {
+        this.logger.warn(`⚠️ Flag '${flagKey}' not found in Remote Config - using default (${defaultValue})`);
+        this.logger.warn(`💡 Hint: Create flag '${flagKey}' in Firebase Console → Remote Config`);
+      } else {
+        this.logger.log(`✅ Remote Config fetched - Flag '${flagKey}' = ${value} (raw: ${raw})`);
+      }
+      
+      this.setCache(flagKey, value);
+      return value;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      this.logger.error(`❌ Failed to fetch Remote Config for '${flagKey}': ${errorMessage}`);
+      
+      // Provide specific troubleshooting hints
+      if (errorMessage.includes('403') || errorMessage.includes('Permission denied')) {
+        this.logger.error('💡 Hint: Service account lacks permissions - grant "Firebase Remote Config Admin" role in IAM');
+      } else if (errorMessage.includes('API has not been used')) {
+        this.logger.error('💡 Hint: Enable Firebase Remote Config API in Google Cloud Console');
+      } else if (errorMessage.includes('ETIMEDOUT') || errorMessage.includes('ENOTFOUND')) {
+        this.logger.error('💡 Hint: Network connectivity issue - check firewall or DNS settings');
+      }
+      
+      if (err instanceof Error && err.stack) {
+        this.logger.error(`🔍 Error details: ${err.stack.split('\n').slice(0, 2).join(' | ')}`);
+      }
+      this.setCache(flagKey, defaultValue);
+      return defaultValue;
+    }
+  }
+
+  private setCache(key: string, value: boolean) {
+    this.cache.set(key, { value, fetchedAt: Date.now(), ttl: this.defaultTtl });
+  }
+}

@@ -529,4 +529,131 @@ export class ComunidadService {
       throw error;
     }
   }
+<<<<<<< HEAD
+=======
+
+  //Reportes//
+  /**
+   * Proxy para crear un nuevo reporte de contenido
+   */
+  async createReport(createReportDto: any, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.comunidadServiceUrl}/reportes`;
+
+    try {
+      this.logger.log(`Forwarding POST request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.post(url, createReportDto, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding create report request`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Proxy para obtener todos los reportes (solo admins)
+   */
+  async getAllReports(
+    estado?: string,
+    tipoContenido?: string,
+    request?: Request,
+  ) {
+    const config = request ? JwtForwardingHelper.getAxiosConfig(request) : {};
+    let url = `${this.comunidadServiceUrl}/reportes`;
+
+    // Agregar query params si existen
+    const params = new URLSearchParams();
+    if (estado) params.append('estado', estado);
+    if (tipoContenido) params.append('tipoContenido', tipoContenido);
+
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding get all reports request`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Proxy para obtener estadísticas de reportes (solo admins)
+   */
+  async getReportStatistics(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.comunidadServiceUrl}/reportes/estadisticas`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding get statistics request`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Proxy para obtener los reportes del usuario autenticado
+   */
+  async getMyReports(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.comunidadServiceUrl}/reportes/mis-reportes`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding get my reports request`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Proxy para obtener un reporte por ID (solo admins)
+   */
+  async getReportById(reporteId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.comunidadServiceUrl}/reportes/${reporteId}`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding get report by id request`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Proxy para actualizar el estado de un reporte (solo admins)
+   */
+  async updateReportStatus(
+    reporteId: string,
+    updateStatusDto: any,
+    request: Request,
+  ) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.comunidadServiceUrl}/reportes/${reporteId}/estado`;
+
+    try {
+      this.logger.log(`Forwarding PATCH request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.patch(url, updateStatusDto, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding update report status request`, error);
+      throw error;
+    }
+  }
+>>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 }

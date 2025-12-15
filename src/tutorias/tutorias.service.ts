@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable , Logger} from '@nestjs/common';
 import { CreateTutoriaDto } from './dto/create-tutoria.dto';
 import { UpdateTutoriaDto } from './dto/update-tutoria.dto';
 import { HttpService } from '@nestjs/axios';
@@ -25,14 +25,14 @@ export class TutoriasService {
     this.tutoriasManagementServiceUrl = url;
   }
 
+
+
   async updateAvailabilityById(id: string, disponibilidad: any, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
     const url = `${this.tutoriasManagementServiceUrl}/api/users/id/${id}/availability`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.patch(url, { disponibilidad }, config),
-      );
+      const response = await firstValueFrom(this.httpService.patch(url, { disponibilidad }, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding PATCH users/id availability`, error);
@@ -40,24 +40,15 @@ export class TutoriasService {
     }
   }
 
-  async updateAvailabilityByEmail(
-    email: string,
-    disponibilidad: any,
-    req: Request,
-  ) {
+  async updateAvailabilityByEmail(email: string, disponibilidad: any, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
     const url = `${this.tutoriasManagementServiceUrl}/api/users/email/${email}/availability`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.patch(url, { disponibilidad }, config),
-      );
+      const response = await firstValueFrom(this.httpService.patch(url, { disponibilidad }, config));
       return response.data;
     } catch (error) {
-      this.logger.error(
-        `Error forwarding PATCH users/email availability`,
-        error,
-      );
+      this.logger.error(`Error forwarding PATCH users/email availability`, error);
       throw error;
     }
   }
@@ -96,22 +87,20 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET users/tutores`, error);
+      this.logger.error(`Error forwarding GET users/tutors`, error);
       throw error;
     }
   }
 
   async create(createTutoriaDto: CreateTutoriaDto, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
-    const url = `${this.tutoriasManagementServiceUrl}/api/tutores`;
+    const url = `${this.tutoriasManagementServiceUrl}/api/tutors`;
     try {
       this.logger.log(`Forwarding POST request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.post(url, createTutoriaDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.post(url, createTutoriaDto, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding POST tutores`, error);
+      this.logger.error(`Error forwarding POST /api/tutors`, error);
       throw error;
     }
   }
@@ -124,7 +113,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores by-materia`, error);
+      this.logger.error(`Error forwarding GET tutors by-materia`, error);
       throw error;
     }
   }
@@ -137,7 +126,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores ratings`, error);
+      this.logger.error(`Error forwarding GET tutors ratings`, error);
       throw error;
     }
   }
@@ -150,7 +139,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores reputacion`, error);
+      this.logger.error(`Error forwarding GET tutors reputacion`, error);
       throw error;
     }
   }
@@ -163,7 +152,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding GET tutores materias`, error);
+      this.logger.error(`Error forwarding GET tutors materias`, error);
       throw error;
     }
   }
@@ -173,12 +162,10 @@ export class TutoriasService {
     const url = `${this.tutoriasManagementServiceUrl}/tutors/${id}/materias`;
     try {
       this.logger.log(`Forwarding POST request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.post(url, addMateriasDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.post(url, addMateriasDto, config));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding POST tutores materias`, error);
+      this.logger.error(`Error forwarding POST tutors materias`, error);
       throw error;
     }
   }
@@ -188,12 +175,10 @@ export class TutoriasService {
     const url = `${this.tutoriasManagementServiceUrl}/tutors/${id}/materias`;
     try {
       this.logger.log(`Forwarding DELETE request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.delete(url, { ...config, data: removeMateriasDto }),
-      );
+      const response = await firstValueFrom(this.httpService.delete(url, { ...config, data: removeMateriasDto }));
       return response.data;
     } catch (error) {
-      this.logger.error(`Error forwarding DELETE tutores materias`, error);
+      this.logger.error(`Error forwarding DELETE tutors materias`, error);
       throw error;
     }
   }
@@ -216,9 +201,7 @@ export class TutoriasService {
     const url = `${this.tutoriasManagementServiceUrl}/api/stats/popular-subjects`;
     try {
       this.logger.log(`Forwarding GET request to: ${url} (limit=${limit})`);
-      const response = await firstValueFrom(
-        this.httpService.get(url, { ...config, params: { limit } }),
-      );
+      const response = await firstValueFrom(this.httpService.get(url, { ...config, params: { limit } }));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding GET popular-subjects`, error);
@@ -231,9 +214,7 @@ export class TutoriasService {
     const url = `${this.tutoriasManagementServiceUrl}/api/sessions`;
     try {
       this.logger.log(`Forwarding POST request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.post(url, createSessionDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.post(url, createSessionDto, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding POST sessions`, error);
@@ -285,9 +266,7 @@ export class TutoriasService {
     const url = `${this.tutoriasManagementServiceUrl}/api/sessions/${sessionId}/confirmar`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.patch(url, { tutorId }, config),
-      );
+      const response = await firstValueFrom(this.httpService.patch(url, { tutorId }, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding PATCH sessions confirmar`, error);
@@ -295,19 +274,12 @@ export class TutoriasService {
     }
   }
 
-  async rejectSession(
-    sessionId: string,
-    tutorId: string,
-    rejectDto: any,
-    req: Request,
-  ) {
+  async rejectSession(sessionId: string, tutorId: string, rejectDto: any, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
     const url = `${this.tutoriasManagementServiceUrl}/api/sessions/${sessionId}/rechazar`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.patch(url, rejectDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.patch(url, rejectDto, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding PATCH sessions rechazar`, error);
@@ -315,19 +287,12 @@ export class TutoriasService {
     }
   }
 
-  async cancelSession(
-    sessionId: string,
-    userId: string,
-    cancelDto: any,
-    req: Request,
-  ) {
+  async cancelSession(sessionId: string, userId: string, cancelDto: any, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
     const url = `${this.tutoriasManagementServiceUrl}/api/sessions/${sessionId}/cancelar`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.patch(url, cancelDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.patch(url, cancelDto, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding PATCH sessions cancelar`, error);
@@ -335,19 +300,12 @@ export class TutoriasService {
     }
   }
 
-  async completeSession(
-    sessionId: string,
-    tutorId: string,
-    completeDto: any,
-    req: Request,
-  ) {
+  async completeSession(sessionId: string, tutorId: string, completeDto: any, req: Request) {
     const config = JwtForwardingHelper.getAxiosConfig(req);
     const url = `${this.tutoriasManagementServiceUrl}/api/sessions/${sessionId}/completar`;
     try {
       this.logger.log(`Forwarding PATCH request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.patch(url, completeDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.patch(url, completeDto, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding PATCH sessions completar`, error);
@@ -360,9 +318,7 @@ export class TutoriasService {
     const url = `${this.tutoriasManagementServiceUrl}/api/ratings`;
     try {
       this.logger.log(`Forwarding POST request to: ${url}`);
-      const response = await firstValueFrom(
-        this.httpService.post(url, createRatingDto, config),
-      );
+      const response = await firstValueFrom(this.httpService.post(url, createRatingDto, config));
       return response.data;
     } catch (error) {
       this.logger.error(`Error forwarding POST ratings`, error);
@@ -430,10 +386,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(
-        `Error forwarding GET /api/sessions/upcoming/${userId}`,
-        error,
-      );
+      this.logger.error(`Error forwarding GET /api/sessions/upcoming/${userId}`, error);
       throw error;
     }
   }
@@ -446,10 +399,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(
-        `Error forwarding GET /api/sessions/stats/${userId}`,
-        error,
-      );
+      this.logger.error(`Error forwarding GET /api/sessions/stats/${userId}`, error);
       throw error;
     }
   }
@@ -462,10 +412,7 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(
-        `Error forwarding GET /api/tutors/${userId}/pending-sessions`,
-        error,
-      );
+      this.logger.error(`Error forwarding GET /api/tutors/${userId}/pending-sessions`, error);
       throw error;
     }
   }
@@ -478,11 +425,94 @@ export class TutoriasService {
       const response = await firstValueFrom(this.httpService.get(url, config));
       return response.data;
     } catch (error) {
-      this.logger.error(
-        `Error forwarding GET /api/tutors/${userId}/confirmed-sessions`,
-        error,
-      );
+      this.logger.error(`Error forwarding GET /api/tutors/${userId}/confirmed-sessions`, error);
       throw error;
     }
   }
+
+  async findById(Id: string, req: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(req);
+    const url = `${this.tutoriasManagementServiceUrl}/api/tutors/${Id}`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding GET /api/tutors/${Id}`, error);
+      throw error;
+    }
+  }
+
+  async createSubject(createSubjectDto: any, req: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(req);
+    const url = `${this.tutoriasManagementServiceUrl}/api/subjects`;
+    try {
+      this.logger.log(`Forwarding POST request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.post(url, createSubjectDto, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding POST subjects`, error);
+      throw error;
+    }
+  }
+
+  async findAllSubjects(query: any, req: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(req);
+    const url = `${this.tutoriasManagementServiceUrl}/api/subjects`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, { ...config, params: query }),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding GET subjects`, error);
+      throw error;
+    }
+  }
+
+  async findSubjectByCodigo(codigo: string, req: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(req);
+    const url = `${this.tutoriasManagementServiceUrl}/api/subjects/codigo/${codigo}`;
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.get(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding GET subjects/codigo/${codigo}`, error);
+      throw error;
+    }
+  }
+
+  async updateSubject(codigo: string, updateSubjectDto: any, req: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(req);
+    const url = `${this.tutoriasManagementServiceUrl}/api/subjects/${codigo}`;
+    try {
+      this.logger.log(`Forwarding PATCH request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.patch(url, updateSubjectDto, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding PATCH subjects/${codigo}`, error);
+      throw error;
+    }
+  }
+
+  async removeSubject(codigo: string, req: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(req);
+    const url = `${this.tutoriasManagementServiceUrl}/api/subjects/${codigo}`;
+    try {
+      this.logger.log(`Forwarding DELETE request to: ${url}`);
+      const response = await firstValueFrom(this.httpService.delete(url, config));
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error forwarding DELETE subjects/${codigo}`, error);
+      throw error;
+    }
+  }
+
+
 }

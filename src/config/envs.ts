@@ -24,6 +24,13 @@ interface EnvVars {
   TUTORIAS_AZURE?: string;
   TUTORIAS_PORT?: number;
   TUTORIAS_HOST?: string;
+<<<<<<< HEAD
+=======
+  FIREBASE_PROJECT_ID?: string;
+  FIREBASE_CLIENT_EMAIL?: string;
+  FIREBASE_PRIVATE_KEY?: string;
+  FEATURE_FLAGS_REFRESH_MS?: number;
+>>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 }
 
 const envsSchema = joi
@@ -50,6 +57,13 @@ const envsSchema = joi
     TUTORIAS_AZURE: joi.string().optional(),
     TUTORIAS_PORT: joi.number().optional(),
     TUTORIAS_HOST: joi.string().optional(),
+<<<<<<< HEAD
+=======
+    FIREBASE_PROJECT_ID: joi.string().optional(),
+    FIREBASE_CLIENT_EMAIL: joi.string().optional(),
+    FIREBASE_PRIVATE_KEY: joi.string().optional(),
+    FEATURE_FLAGS_REFRESH_MS: joi.number().optional(),
+>>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
   })
   .unknown(true);
 
@@ -70,10 +84,26 @@ export const envs = {
   comunidadHost: envVars.COMUNIDAD_HOST,
   comunidadPort: envVars.COMUNIDAD_PORT,
   jwtSecret: envVars.JWT_SECRET,
+<<<<<<< HEAD
   frontendUrl: (envVars.FRONTEND_URL.startsWith('http')
     ? envVars.FRONTEND_URL
     : `https://${envVars.FRONTEND_URL}`
   ).replace(/\/$/, ''),
+=======
+  // Asegurar que CORS use SOLO el origen (scheme+host+port), sin path ni query
+  frontendUrl: (() => {
+    const raw = envVars.FRONTEND_URL.startsWith('http')
+      ? envVars.FRONTEND_URL
+      : `https://${envVars.FRONTEND_URL}`;
+    try {
+      // new URL().origin devuelve solo esquema+host(+puerto)
+      return new URL(raw).origin;
+    } catch {
+      // fallback: quitar trailing slash si no es una URL válida
+      return raw.replace(/\/$/, '');
+    }
+  })(),
+>>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,
@@ -87,4 +117,11 @@ export const envs = {
   tutoriasAzure: envVars.TUTORIAS_AZURE,
   tutoriasPort: envVars.TUTORIAS_PORT,
   tutoriasHost: envVars.TUTORIAS_HOST,
+<<<<<<< HEAD
+=======
+  firebaseProjectId: envVars.FIREBASE_PROJECT_ID,
+  firebaseClientEmail: envVars.FIREBASE_CLIENT_EMAIL,
+  firebasePrivateKey: envVars.FIREBASE_PRIVATE_KEY,
+  featureFlagsRefreshMs: envVars.FEATURE_FLAGS_REFRESH_MS,
+>>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 };
