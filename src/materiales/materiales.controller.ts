@@ -85,6 +85,29 @@ export class MaterialesController {
     return this.materialesService.getTagsPercentageByUser(userId, request);
   }
 
+  /**
+   * GET /materiales/user/:userId/average-rating
+   * Obtener calificación promedio de materiales de un usuario
+   */
+  @Get('user/:userId/average-rating')
+  async getUserMaterialsAverageRating(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getUserMaterialsAverageRating(userId, request);
+  }
+
+  /**
+   * GET /materiales/user/:userId/top
+   * Obtener materiales top de un usuario
+   */
+  @Get('user/:userId/top')
+  async getTopMaterialsByUser(
+    @Param('userId') userId: string,
+    @Req() request: Request,
+  ) {
+    return this.materialesService.getTopMaterialsByUser(userId, request);
+  }
 
   /**
    * GET /materiales/search
@@ -119,6 +142,24 @@ export class MaterialesController {
   @Get('stats/count')
   async getMaterialsCount(@Req() request: Request) {
     return this.materialesService.getMaterialsCount(request);
+  }
+
+  /**
+   * GET /materiales/stats/tags-percentage
+   * Obtener porcentaje de etiquetas en materiales
+   */
+  @Get('stats/tags-percentage')
+  async getTagsPercentage(@Req() request: Request) {
+    return this.materialesService.getTagsPercentage(request);
+  }
+
+  /**
+   * GET /materiales/stats/by-date
+   * Obtener estadísticas de materiales por fecha
+   */
+  @Get('stats/by-date')
+  async getMaterialsByDate(@Req() request: Request) {
+    return this.materialesService.getMaterialsByDate(request);
   }
 
   /**

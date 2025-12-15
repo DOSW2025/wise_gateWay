@@ -187,6 +187,44 @@ export class MaterialesService {
   }
 
   /**
+   * Obtener calificación promedio de materiales de un usuario
+   */
+  async getUserMaterialsAverageRating(userId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/user/${userId}/average-rating`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting user materials average rating`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Obtener materiales top de un usuario
+   */
+  async getTopMaterialsByUser(userId: string, request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/user/${userId}/top`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting top materials by user`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Obtener materiales populares
    */
   async getPopularMaterials(limit: number, request: Request) {
@@ -239,6 +277,44 @@ export class MaterialesService {
       return response.data;
     } catch (error) {
       this.logger.error(`Error getting materials count`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Obtener porcentaje de etiquetas en materiales
+   */
+  async getTagsPercentage(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/stats/tags-percentage`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting tags percentage`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Obtener estadísticas de materiales por fecha
+   */
+  async getMaterialsByDate(request: Request) {
+    const config = JwtForwardingHelper.getAxiosConfig(request);
+    const url = `${this.materialesServiceUrl}/sorted/by-date`;
+
+    try {
+      this.logger.log(`Forwarding GET request to: ${url}`);
+      const response = await firstValueFrom(
+        this.httpService.get(url, config),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error getting materials by date`, error);
       throw error;
     }
   }
