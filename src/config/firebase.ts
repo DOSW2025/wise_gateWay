@@ -1,6 +1,8 @@
 import * as admin from 'firebase-admin';
+import { Logger } from '@nestjs/common';
 import { envs } from './envs';
 
+const logger = new Logger('FirebaseConfig');
 let appPromise: Promise<admin.app.App | null> | null = null;
 
 export async function getFirebaseApp(): Promise<admin.app.App | null> {
@@ -10,7 +12,10 @@ export async function getFirebaseApp(): Promise<admin.app.App | null> {
     const clientEmail = envs.firebaseClientEmail;
     const privateKeyRaw = envs.firebasePrivateKey;
 
+    logger.log(`🔧 Firebase initialization - ProjectID: ${projectId || '❌ MISSING'}, Email: ${clientEmail ? '✅ SET' : '❌ MISSING'}, PrivateKey: ${privateKeyRaw ? '✅ SET (' + privateKeyRaw.substring(0, 30) + '...)' : '❌ MISSING'}`);
+
     if (!projectId || !clientEmail || !privateKeyRaw) {
+      logger.warn('⚠️ Firebase not fully configured - feature flags will use default values');
       return null; // Firebase not configured; flags will default to safe values
     }
 
@@ -19,17 +24,41 @@ export async function getFirebaseApp(): Promise<admin.app.App | null> {
     // If an app is already initialized (e.g., hot reload), reuse it
     const existingApps = admin.apps;
     if (existingApps && existingApps.length > 0) {
+      logger.log('♻️ Reusing existing Firebase app instance');
       return existingApps[0];
     }
 
-    return admin.initializeApp({
-      credential: admin.credential.cert({
+    try {
+      const app = admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId,
+          clientEmail,
+          privateKey,
+        }),
         projectId,
-        clientEmail,
-        privateKey,
-      }),
-      projectId,
-    });
+      });
+      logger.log('✅ Firebase Admin initialized successfully');
+      return app;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      logger.error(`❌ Firebase initialization failed: ${errorMessage}`);
+      
+      // Provide specific troubleshooting hints based on error type
+      if (errorMessage.includes('PEM')) {
+        logger.error('💡 Hint: Check FIREBASE_PRIVATE_KEY format - remove quotes, keep \\n escapes');
+      } else if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('ETIMEDOUT')) {
+        logger.error('💡 Hint: Network issue - check internet connectivity or firewall rules');
+      } else if (errorMessage.includes('invalid') && errorMessage.includes('service account')) {
+        logger.error('💡 Hint: Service account may be revoked - regenerate credentials in Firebase Console');
+      } else if (errorMessage.includes('Project')) {
+        logger.error('💡 Hint: Verify FIREBASE_PROJECT_ID matches your Firebase project');
+      }
+      
+      if (error instanceof Error && error.stack) {
+        logger.error(`🔍 Stack trace: ${error.stack.split('\n').slice(0, 3).join(' | ')}`);
+      }
+      return null; // Return null instead of throwing to allow app to start with default values
+    }
   })();
   return appPromise;
 }
