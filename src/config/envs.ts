@@ -78,10 +78,19 @@ export const envs = {
   comunidadHost: envVars.COMUNIDAD_HOST,
   comunidadPort: envVars.COMUNIDAD_PORT,
   jwtSecret: envVars.JWT_SECRET,
-  frontendUrl: (envVars.FRONTEND_URL.startsWith('http')
-    ? envVars.FRONTEND_URL
-    : `https://${envVars.FRONTEND_URL}`
-  ).replace(/\/$/, ''),
+  // Asegurar que CORS use SOLO el origen (scheme+host+port), sin path ni query
+  frontendUrl: (() => {
+    const raw = envVars.FRONTEND_URL.startsWith('http')
+      ? envVars.FRONTEND_URL
+      : `https://${envVars.FRONTEND_URL}`;
+    try {
+      // new URL().origin devuelve solo esquema+host(+puerto)
+      return new URL(raw).origin;
+    } catch {
+      // fallback: quitar trailing slash si no es una URL válida
+      return raw.replace(/\/$/, '');
+    }
+  })(),
   authAzure: envVars.AUTH_AZURE,
   userManagementAzure: envVars.USER_MANAGEMENT_AZURE,
   protocol: envVars.AUTH_PROTOCOL,

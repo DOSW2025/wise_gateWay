@@ -18,6 +18,7 @@ async function gateway_main() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
+  logger.log(`CORS origin permitido: ${envs.frontendUrl}`);
 
   app.useGlobalFilters(new AllExceptionsFilter());
 
