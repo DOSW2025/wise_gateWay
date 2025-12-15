@@ -10,11 +10,8 @@ import { ComunidadModule } from './comunidad/comunidad.module';
 import { IaModule } from './ia/ia.module';
 import { ThrottlerExceptionFilter } from './common/filters/throttler-exception.filter';
 import { TutoriasModule } from './tutorias/tutorias.module';
-<<<<<<< HEAD
-=======
 import { FeatureFlagsModule } from './feature-flags/feature-flags.module';
 import { FeatureFlagGuard } from './common/guards/feature-flag.guard';
->>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 
 @Module({
   imports: [
@@ -44,13 +41,10 @@ import { FeatureFlagGuard } from './common/guards/feature-flag.guard';
       useClass: ThrottlerGuard,
     },
     {
-<<<<<<< HEAD
-=======
       provide: APP_GUARD,
       useClass: FeatureFlagGuard,
     },
     {
->>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
       provide: APP_FILTER,
       useClass: ThrottlerExceptionFilter,
     },

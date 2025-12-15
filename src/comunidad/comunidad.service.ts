@@ -529,8 +529,6 @@ export class ComunidadService {
       throw error;
     }
   }
-<<<<<<< HEAD
-=======
 
   //Reportes//
   /**
@@ -655,5 +653,4 @@ export class ComunidadService {
       throw error;
     }
   }
->>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 }

@@ -7,13 +7,10 @@ import {
   Body,
   UseGuards,
   Req,
-<<<<<<< HEAD
-=======
   Patch,
   Query,
   HttpCode,
   HttpStatus,
->>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,13 +18,6 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-<<<<<<< HEAD
-} from '@nestjs/swagger';
-import type { Request } from 'express';
-import { ComunidadService } from './comunidad.service';
-import { JwtAuthGuard } from '../auth';
-import { CreateGroupDto, SendMessageBodyDto } from './dto';
-=======
   ApiQuery,
 } from '@nestjs/swagger';
 import type { Request } from 'express';
@@ -41,7 +31,6 @@ import { CreateGroupDto,
   EstadoReporte,
   TipoContenido,  
 } from './dto';
->>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 
 // Main controller with root prefix for direct routes like /forums, /chats, etc
 @ApiTags('Comunidad - Forums & Chats')
@@ -442,8 +431,6 @@ export class ComunidadController {
   async getVotes(@Req() request: Request) {
     return this.comunidadService.getVotes(request);
   }
-<<<<<<< HEAD
-=======
 
   // ============ REPORTES - Direct routes ============
   @Post('reportes')
@@ -591,5 +578,4 @@ export class ComunidadController {
       request,
     );
   }
->>>>>>> 426cdeb4182905dbf4c03d397b83d3c4ca2bb6bc
 }
